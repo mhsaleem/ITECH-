@@ -7,3 +7,5 @@ def index(request):
     return render(request, 'punny/index.html', {})
     # return render(request, 'punny/index.html', {})
 
+def search(request):
+    return render(request, 'punny/searchResults.html', {})
