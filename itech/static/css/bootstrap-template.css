@@ -11,23 +11,27 @@
 }
 
 .lightBeigeBackground {
-    background-color: #E8DDCB;
+    background-color: #E8DDCB!important;
 }
 
 .beigeBackground {
-    background-color: #CDB380;
+    background-color: #CDB380!important;
 }
 
 .lighterBlueBackground {
-    background-color: #016563;
+    background-color: #016563!important;
 }
 
 .middleBlueBackground {
-    background-color: #023649;
+    background-color: #023649!important;
 }
 
 .darkBlueBackground {
-    background-color: #011534;
+    background-color: #011534!important;
+}
+
+.whiteText{
+    color: white!important;
 }
 
 .lightBeigeText {
@@ -88,8 +92,15 @@ body {
 }
 
 .navbar-nav, .navbar-nav li, .navbar-nav li a {
-  height: 30px;
-  line-height: 30px;
+    height: 30px;
+    line-height: 30px;
+}
+
+.navbar .divider-vertical {
+    height: 30px;
+    margin: 0 9px;
+    border-left: 1px solid #f2f2f2;
+    border-right: 1px solid #ffffff;
 }
 
 /*

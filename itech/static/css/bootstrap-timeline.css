@@ -40,7 +40,7 @@ span {
  * --------------------------------------------- */
  .timeline {
     list-style: none;
-    padding: 10px 0;
+    /*padding: 10px 0;*/
     position: relative;
     font-weight: 300;
 }
@@ -178,7 +178,7 @@ span {
 .no-float {
     float: none !important;
 }
-@media (max-width: 767px) {
+@media (max-width: 900px) {
     ul.timeline:before {
         left: 40px;
     }
@@ -190,9 +190,9 @@ span {
         clear: left;
     }
     ul.timeline > li > .timeline-panel {
-        width: calc(100% - 65px);
-        width: -moz-calc(100% - 65px);
-        width: -webkit-calc(100% - 65px);
+        width: calc(110% );
+        width: -moz-calc(110%);
+        width: -webkit-calc(110%);
     }
     ul.timeline > li > .timeline-badge {
         left: 28px;
