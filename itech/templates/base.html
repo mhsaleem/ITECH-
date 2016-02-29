@@ -9,18 +9,22 @@
     <link rel="icon" href="http://getbootstrap.com/favicon.ico">
 
     {% load staticfiles %}
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script src="//oss.maxcdn.com/bootbox/4.2.0/bootbox.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="http://sliptree.github.io/bootstrap-tokenfield/dist/bootstrap-tokenfield.js"
             charset="UTF-8"></script>
-
-    <title>Rango - {% block title %}How to Tango with Django!{% endblock %}</title>
+    <script type="text/javascript" src="{% static 'js/javascript-template.js' %}"></script>
 
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" type="text/css" rel="stylesheet">
+    {#    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">#}
     <link href="http://sliptree.github.io/bootstrap-tokenfield/dist/css/tokenfield-typeahead.css" rel="stylesheet">
     <link href="http://sliptree.github.io/bootstrap-tokenfield/dist/css/bootstrap-tokenfield.css" rel="stylesheet">
     <link href="{% static 'css/bootstrap-template.css' %}" rel="stylesheet">
+
+    <title>Rango - {% block title %}How to Tango with Django!{% endblock %}</title>
 
 </head>
 
@@ -32,53 +36,20 @@
             <button type="button" class="navbar-toggle collapsed darkBlueBackground" data-toggle="collapse"
                     data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span> {# makes up the hamburger menu #}
+                <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand darkBlueText" rel="home" href="/rango">
+            <a class="navbar-brand darkBlueText" rel="home" href="{% url 'index' %}">
                 <img src="{% static 'images/backgroundLogo.svg' %}"
-                     style="max-width:45px; margin-top: -12.5px; margin-left: 10px">
+                     style="max-width:35px;">
             </a>
 
         </div>
         <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right ">
-                <li>
-                    <div class="input-append btn-group" style="margin-top: 15px">
-                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#"
-                           style="background-color: #011534;">
-                            <span class="glyphicon glyphicon-pencil" style="color: white;"></span>
-                        </a>
-                        <ul class="dropdown-menu punBuilder">
-                            <textarea class="form-control" rows="5" id="comment"
-                                      placeholder="Insert your pun here.."></textarea>
-                               <input type="text" class="form-control" id="tokenfield" placeholder="Insert tags here where you should add them, e.g. blue, Rory, pink" style="width: 100%;"/>
-                            <script>
-                                $('#tokenfield').tokenfield({
-                                    autocomplete: {
-                                        source: [],
-                                        delay: 100
-                                    },
-                                    showAutocompleteOnFocus: true
-                                })
-                            </script>
-                        </ul>
-                    </div>
-                </li>
-
-{#                <li><a href="{% url 'index' %}">Home</a></li>#}
-                {#                <li><a href="{% url 'search' %}">Search</a></li>#}
-{#                {% if user.is_authenticated %}#}
-{#                    <li><a href="{% url 'restricted' %}">Restricted Page</a></li>#}
-{#                    <li><a href="{% url 'auth_logout' %}?next=/rango/">Logout</a></li>#}
-{#                    <li><a href="{% url 'add_category' %}">Add a New Category</a></li>#}
-{#                {% else %}#}
-{#                    <li><a href="{% url 'registration_register' %}">Register Here</a></li>#}
-{#                    <li><a href="{% url 'auth_login' %}">Login</a></li>#}
-{#                {% endif %}#}
-{#                <li><a href="{% url 'about' %}">About</a></li>#}
-
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#" id="loginButton"><span class="glyphicon glyphicon-pencil"></span> New Pun</a></li>
+                <li><a href="{% url 'index' %}"><span class="glyphicon glyphicon-home"></span> Home</a></li>
             </ul>
         </div>
     </div>
@@ -86,6 +57,34 @@
 
 <div class="col-sm-12 col-md-15 main">
     <div>
+        <form id="loginForm" method="post" class="form-horizontal"
+              style="display: none; padding-left: 2%; padding-right: 2%">
+            <div class="form-group">
+                    <textarea class="form-control" rows="5" id="comment"
+                              placeholder="Insert your pun here.."></textarea>
+            </div>
+
+            <div class="form-group">
+                <input type="text" class="form-control" id="tokenfield"
+                       placeholder="Insert tags.."
+                       style="width: 100%;"/>
+                <script>
+                    $('#tokenfield').tokenfield({
+                        autocomplete: {
+                            source: [],
+                            delay: 100
+                        },
+                        showAutocompleteOnFocus: true
+                    })
+                </script>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-default">Post</button>
+            </div>
+        </form>
+
+
         {% block body_block %}{% endblock %}
     </div>
 </div>
