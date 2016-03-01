@@ -22,13 +22,14 @@
     {#    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">#}
     <link href="http://sliptree.github.io/bootstrap-tokenfield/dist/css/tokenfield-typeahead.css" rel="stylesheet">
     <link href="http://sliptree.github.io/bootstrap-tokenfield/dist/css/bootstrap-tokenfield.css" rel="stylesheet">
+    <link href="{% static 'css/bootstrap-timeline.css' %}" rel="stylesheet">
     <link href="{% static 'css/bootstrap-template.css' %}" rel="stylesheet">
 
     <title>Rango - {% block title %}How to Tango with Django!{% endblock %}</title>
 
 </head>
 
-<body>
+<body style="background-color: white">
 
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container-fluid lightBeigeBackground">
@@ -40,31 +41,46 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand darkBlueText" rel="home" href="{% url 'index' %}">
+            <a class="navbar-brand darkBlueText" rel="home" href="/punny">
                 <img src="{% static 'images/backgroundLogo.svg' %}"
                      style="max-width:35px;">
             </a>
 
         </div>
+{#        <div class="col-sm-3 col-md-3 pull-left">#}
+{#            <form class="navbar-form" role="search">#}
+{#                <div class="input-group">#}
+{#                    <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">#}
+{#                    <div class="input-group-btn">#}
+{#                        <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i>#}
+{#                        </button>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </form>#}
+{#        </div>#}
+
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#" id="loginButton"><span class="glyphicon glyphicon-pencil"></span> New Pun</a></li>
                 <li><a href="{% url 'index' %}"><span class="glyphicon glyphicon-home"></span> Home</a></li>
+                <li><a href="#" id="loginButton"><span class="glyphicon glyphicon-pencil"></span> New Pun</a></li>
+                <li><a href="{% url 'settings' %}"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
+                {#                <li><a href="#"><span class="glyphicon glyphicon-user"></span> Login</a></li>#}
+                <li><a href="{% url 'profile' %}"><span><img src="{% static 'images/leonardo-dicaprio.jpg' %}"
+                                                             class="img-circle" width="40px"></span> Leonardo</a></li>
             </ul>
         </div>
     </div>
 </div>
 
-<div class="col-sm-12 col-md-15 main">
+<div class="col-sm-12 col-md-15 main" style="background-color: transparent">
     <div>
         <form id="loginForm" method="post" class="form-horizontal"
               style="display: none; padding-left: 2%; padding-right: 2%">
-            <div class="form-group">
-                    <textarea class="form-control" rows="5" id="comment"
+            <div class="form-group" style="color: #999999;">
+                    <textarea class="form-control" rows="5" id="punBody"
                               placeholder="Insert your pun here.."></textarea>
-            </div>
+                <label id="count" style="padding-top: 5px;">Characters left: 350</label>
 
-            <div class="form-group">
                 <input type="text" class="form-control" id="tokenfield"
                        placeholder="Insert tags.."
                        style="width: 100%;"/>
@@ -77,6 +93,11 @@
                         showAutocompleteOnFocus: true
                     })
                 </script>
+
+                <label style="padding-top: 10px;">
+                    <input type="checkbox" value="">
+                    Pun is NSFW
+                </label>
             </div>
 
             <div class="form-group">
@@ -98,4 +119,5 @@
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
 </body>
+<hr>
 </html>

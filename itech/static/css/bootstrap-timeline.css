@@ -49,10 +49,8 @@ span {
     bottom: 0;
     position: absolute;
     content:" ";
-    width: 2px;
     background: ghostwhite;
     left: 50%;
-    margin-left: -1.5px;
 }
 .timeline > li {
     margin-bottom: 20px;

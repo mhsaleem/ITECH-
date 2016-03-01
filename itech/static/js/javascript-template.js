@@ -34,8 +34,8 @@ $(document).ready(function () {
             })
             .on('shown.bs.modal', function () {
                 $('#loginForm')
-                    .show()                             // Show the login form
-                    .formValidation('resetForm', true); // Reset form
+                    .show()       ;                      // Show the login form
+                    //.formValidation('resetForm', true); // Reset form
             })
             .on('hide.bs.modal', function (e) {
                 // Bootbox will remove the modal (including the body which contains the login form)
@@ -46,11 +46,18 @@ $(document).ready(function () {
             .modal('show');
     });
 
-    $('#tokenfield').tokenfield({
-        //autocomplete: {
-        //    source: ['red', 'blue', 'green', 'yellow', 'violet', 'brown', 'purple', 'black', 'white'],
-        //    delay: 100
-        //},
-        showAutocompleteOnFocus: true
-    });
+    //$('#tokenfield').tokenfield({
+    //    //autocomplete: {
+    //    //    source: ['red', 'blue', 'green', 'yellow', 'violet', 'brown', 'purple', 'black', 'white'],
+    //    //    delay: 100
+    //    //},
+    //    showAutocompleteOnFocus: true
+    //});
+    var maxCharacters = 350;
+    var punBody = document.getElementById('punBody');
+    var countLabel = document.getElementById('count');
+    punBody.maxLength = maxCharacters;
+    punBody.onkeyup = function () {
+        countLabel.textContent = "Characters left: " + (maxCharacters - this.value.length);
+    };
 });
