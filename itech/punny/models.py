@@ -23,7 +23,7 @@ class Title(models.Model):
         return self.title
 
 
-class Badges(models.Model):
+class Badge(models.Model):
     title = models.CharField(max_length=128, primary_key=True)
     user = models.ManyToManyField(UserProfile)
 
@@ -45,7 +45,7 @@ class Pun(models.Model):
         return self.text
 
 
-class Tags(models.Model):
+class Tag(models.Model):
     tagText = models.CharField(max_length=28,unique=True)
     pun = models.ManyToManyField(Pun)
 
