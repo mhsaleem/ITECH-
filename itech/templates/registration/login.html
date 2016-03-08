@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{#{% load staticfiles %}#}
+{##}
+{#{% block title %}About{% endblock %}#}
+
+{% block body_block %}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div>
+            <h1>Login</h1>
+            <form method="post" action=".">
+                {% csrf_token %}
+                {{ form.as_p }}
+
+                <input type="submit" value="Log in"/>
+                <input type="hidden" name="next" value="{{ next }}"/>
+            </form>
+
+            <p>Not a member? <a href="{% url 'registration_register' %}">Register</a>!</p>
+        </div>
+    </div>
+{% endblock %}

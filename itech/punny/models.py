@@ -9,6 +9,7 @@ class UserProfile(models.Model):
 
     # The additional attributes we wish to include.
     picture = models.ImageField(upload_to='profile_images', blank=True)
+    # currentBadge = models.OneToOneField(Badge)
 
     # Override the __unicode__() method to return out something meaningful!
     def __unicode__(self):
