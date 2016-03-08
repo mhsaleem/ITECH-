@@ -46,7 +46,7 @@ class Pun(models.Model):
 
 
 class Tag(models.Model):
-    tagText = models.CharField(max_length=28,unique=True)
+    text = models.CharField(max_length=28,unique=True)
     pun = models.ManyToManyField(Pun)
 
     def __unicode__(self):
