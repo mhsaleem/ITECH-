@@ -4,6 +4,7 @@
 {% block title %}Settings{% endblock %}
 
 {% block body_block %}
+    <script type="text/javascript" src="{% static 'js/javascript-profile-settings.js' %}"></script>
 
     <div class="container">
         <h1>Edit Profile</h1>
@@ -12,10 +13,41 @@
             <!-- left column -->
             <div class="col-md-3">
                 <div class="text-center">
-                    <img src="{% static 'images/leonardo-dicaprio.jpg' %}" class="avatar img-circle" alt="avatar" style="width: 200px">
+                    <img src="{% static 'images/leonardo-dicaprio.jpg' %}" class="avatar img-circle" alt="avatar"
+                         style="width: 200px">
                     <h6>Upload a different photo...</h6>
-
                     <input type="file" class="form-control">
+                    {# Choose your badge!!! TODO: Populate this based on users django stuff#}
+                    <div class="form-group" style="padding-top: 40px">
+                        <label class="col-md-3 control-label">Your badge:</label>
+                        <div class="col-md-8">
+                            <select id="e1_element" name="e1_element">
+                                <option value="">No icon</option>
+                                <option>icon-user</option>
+                                <option>icon-search</option>
+                                <option>icon-right-dir</option>
+                                <option>icon-star</option>
+                                <option>icon-cancel</option>
+                                <option>icon-help-circled</option>
+                                <option>icon-info-circled</option>
+                                <option>icon-eye</option>
+                                <option>icon-tag</option>
+                                <option>icon-bookmark</option>
+                                <option>icon-heart</option>
+                                <option>icon-thumbs-down-alt</option>
+                                <option>icon-upload-cloud</option>
+                                <option>icon-phone-squared</option>
+                                <option>icon-cog</option>
+                                <option>icon-wrench</option>
+                                <option>icon-volume-down</option>
+                                <option>icon-down-dir</option>
+                                <option>icon-up-dir</option>
+                                <option>icon-left-dir</option>
+                                <option>icon-thumbs-up-alt</option>
+                            </select>
+                            <p style="padding-top: 5px">Earn new badges by posting puns! </p>
+                        </div>
+                    </div>
                 </div>
             </div>
 

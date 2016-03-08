@@ -9,6 +9,9 @@
     <link rel="icon" href="http://getbootstrap.com/favicon.ico">
 
     {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'fontello-7275ca86/css/fontello.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'icomoon/style.css' %}"/>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script src="//oss.maxcdn.com/bootbox/4.2.0/bootbox.min.js"></script>
@@ -16,14 +19,19 @@
     <script type="text/javascript" src="http://sliptree.github.io/bootstrap-tokenfield/dist/bootstrap-tokenfield.js"
             charset="UTF-8"></script>
     <script type="text/javascript" src="{% static 'js/javascript-template.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.fonticonpicker.min.js' %}"></script>
+
 
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" type="text/css" rel="stylesheet">
-    {#    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">#}
     <link href="http://sliptree.github.io/bootstrap-tokenfield/dist/css/tokenfield-typeahead.css" rel="stylesheet">
     <link href="http://sliptree.github.io/bootstrap-tokenfield/dist/css/bootstrap-tokenfield.css" rel="stylesheet">
     <link href="{% static 'css/bootstrap-timeline.css' %}" rel="stylesheet">
     <link href="{% static 'css/bootstrap-template.css' %}" rel="stylesheet">
+    <!-- fontIconPicker core CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.fonticonpicker.css' %}"/>
+    <!-- required default theme -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.fonticonpicker.grey.min.css' %}"/>
 
     <title>Rango - {% block title %}How to Tango with Django!{% endblock %}</title>
 
@@ -106,7 +114,9 @@
         </form>
 
 
-        {% block body_block %}{% endblock %}
+        {% block body_block %}
+
+        {% endblock %}
     </div>
 </div>
 </div>
