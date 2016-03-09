@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 from punny.models import Pun, Tag, UserProfile, Badge, Title
-
+import punny_search
+from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-
+from django.db.models import Q
 
 # Create your views here.
 
@@ -15,16 +16,32 @@ def index(request):
 
 
 def search(request):
-    context_dict = {}
-    puns = Pun.objects.order_by('-timeStamp')
-    context_dict
+    query_string = ""
+    puns = None
+    if ('q' in request.POST) and request.POST['q'].strip():
+        query_string = request.POST['q']
 
-    return render(request, 'punny/search-results.html', {})
+        #entry_query = punny_search.get_query(query_string, ['text', ])
+        tagged_puns = Pun.objects.filter(Q(tags__text__icontains=query_string))
+
+        #puns = Pun.objects.filter(entry_query).order_by('-timeStamp')
+
+
+    #puns = Pun.objects.order_by('-timeStamp')
+    #context_dict = {'puns': puns}
+
+
+    return render_to_response('punny/search-results.html',
+                              {'query_string': query_string, 'puns': tagged_puns},
+                              context_instance=RequestContext(request))
+
+    #return render(request, 'punny/search-results.html', context_dict)
 
 
 @login_required
 def userProfile(request):
     return render(request, 'punny/user-profile.html', {})
+
 
 @login_required
 def settings(request):

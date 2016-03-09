@@ -33,6 +33,9 @@ class Badge(models.Model):
     def __unicode__(self):
         return self.title
 
+class Tag(models.Model):
+    text = models.CharField(max_length=28, unique=True)
+
 
 class Pun(models.Model):
     text = models.CharField(max_length=350)
@@ -41,16 +44,14 @@ class Pun(models.Model):
     timeStamp = models.DateTimeField(auto_now_add=True)
     flagCount = models.IntegerField(default=0)
     NSFW = models.BooleanField(default=False)
-
+    tags = models.ManyToManyField(Tag)
     userVote = models.ManyToManyField(UserProfile, related_name='voted_user')
 
     def __unicode__(self):
         return self.text
 
 
-class Tag(models.Model):
-    text = models.CharField(max_length=28, unique=True)
-    pun = models.ManyToManyField(Pun)
+
 
     def __unicode__(self):
         return self.text

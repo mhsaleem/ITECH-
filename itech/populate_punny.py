@@ -19,6 +19,10 @@ def populate():
         user=user_profile
     )
 
+    tag = add_tag(
+        text="Religpun",
+    )
+
     add_badge(
         title="100 Puns",
         user=user_profile
@@ -26,17 +30,27 @@ def populate():
 
     pun = add_pun(
         text="This is a pun",
-        owner=user_profile
+        owner=user_profile,
+        tag=tag
     )
 
-    add_tag(
-        text="Religpun",
-        pun=pun
+    pun = add_pun(
+        text="Whiteboards are remarkable!",
+        owner=user_profile,
+        tag=tag
+    )
+
+    pun = add_pun(
+        text="Leif me alone....",
+        owner=user_profile,
+        tag=tag
     )
 
     user_h = add_user('Hashim')
 
     user_profile = add_user_profile(user_h)
+
+    tag = add_tag("Jargpun")
 
     add_title(
         title="Grand Punmonster",
@@ -50,12 +64,8 @@ def populate():
 
     pun = add_pun(
         text="This is another pun",
-        owner=user_profile
-    )
-
-    add_tag(
-        text="Jargon",
-        pun=pun
+        owner=user_profile,
+        tag=tag
     )
 
     for b in Badge.objects.filter(user=user_r):
@@ -63,9 +73,9 @@ def populate():
     for t in Title.objects.filter(user=user_r):
         print "- {0} - {1}".format(str(user_r), str(t))
     for p in Pun.objects.filter(owner=user_r):
-        print "- {0} - {1}".format(str(user_r), str(p))
-        for t in Tag.objects.filter(pun=p):
-            print "-- {0} - {1}".format(str(p), str(t))
+        print "- {0} - {1} = {2}".format(str(user_r), str(p), str(p.tags))
+        # for t in Tag.objects.filter(pun=p):
+        #     print "-- {0} - {1}".format(str(p), str(t))
 
 
 def add_user(name):
@@ -94,16 +104,16 @@ def add_badge(title, user):
     return b
 
 
-def add_pun(text, owner, score=5):
+def add_pun(text, owner, tag, score=5):
     p = Pun.objects.get_or_create(text=text, owner=owner)[0]
     p.score = score
+    p.tags.add(tag)
     p.save()
     return p
 
 
-def add_tag(text, pun):
+def add_tag(text):
     t = Tag.objects.get_or_create(text=text)[0]
-    t.pun.add(pun)
     t.save()
     return t
 

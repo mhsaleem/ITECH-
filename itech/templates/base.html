@@ -9,6 +9,7 @@
     <link rel="icon" href="http://getbootstrap.com/favicon.ico">
 
     {% load staticfiles %}
+
     <link rel="stylesheet" type="text/css" href="{% static 'fontello-7275ca86/css/fontello.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'icomoon/style.css' %}"/>
 
@@ -16,6 +17,7 @@
     <script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script src="//oss.maxcdn.com/bootbox/4.2.0/bootbox.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
     <script type="text/javascript" src="http://sliptree.github.io/bootstrap-tokenfield/dist/bootstrap-tokenfield.js"
             charset="UTF-8"></script>
     <script type="text/javascript" src="{% static 'js/javascript-template.js' %}"></script>
@@ -49,11 +51,24 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
+
             <a class="navbar-brand darkBlueText" rel="home" href="/punny">
                 <img src="{% static 'images/backgroundLogo.svg' %}"
                      style="max-width:35px;">
             </a>
-
+            <div class="input-group" style="padding-top: 8px;">
+                <form class="navbar-form" action="/punny/search/" method="post">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="id_q" name="q"
+                               placeholder="Search for a tag"/>
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
         {#        <div class="col-sm-3 col-md-3 pull-left">#}
         {#            <form class="navbar-form" role="search">#}
@@ -89,6 +104,7 @@
     <div>
         <form id="loginForm" method="post" class="form-horizontal"
               style="display: none; padding-left: 2%; padding-right: 2%">
+            {% csrf_token %}
             <div class="form-group" style="color: #999999;">
                     <textarea class="form-control" rows="5" id="punBody"
                               placeholder="Insert your pun here.."></textarea>
@@ -118,8 +134,8 @@
             </div>
         </form>
 
-
         {% block body_block %}
+
 
         {% endblock %}
     </div>
