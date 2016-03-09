@@ -1,15 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.models import UserManager
 # Create your models here.
 
 
 class UserProfile(models.Model):
     # This line is required. Links UserProfile to a User model instance.
-    user = models.OneToOneField(User)
-
+    user = models.OneToOneField(User, unique=True)
     # The additional attributes we wish to include.
     picture = models.ImageField(upload_to='profile_images', blank=True)
     # currentBadge = models.OneToOneField(Badge)
+    #objects = UserManager()
 
     # Override the __unicode__() method to return out something meaningful!
     def __unicode__(self):
@@ -19,6 +20,7 @@ class UserProfile(models.Model):
 class Title(models.Model):
     title = models.CharField(max_length=128, primary_key=True)
     user = models.ManyToManyField(UserProfile)
+    objects = UserManager()
 
     def __unicode__(self):
         return self.title
@@ -47,8 +49,8 @@ class Pun(models.Model):
 
 
 class Tag(models.Model):
-    text = models.CharField(max_length=28,unique=True)
+    text = models.CharField(max_length=28, unique=True)
     pun = models.ManyToManyField(Pun)
 
     def __unicode__(self):
-        return self.tagText
+        return self.text

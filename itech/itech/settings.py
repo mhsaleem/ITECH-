@@ -136,3 +136,5 @@ STATIC_URL = '/static/' # You may find this is already defined as such.
 STATICFILES_DIRS = (
     STATIC_PATH,
 )
+
+AUTH_PROFILE_MODULE = 'accounts.UserProfile'

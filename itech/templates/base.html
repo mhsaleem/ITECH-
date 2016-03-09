@@ -70,11 +70,16 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="{% url 'index' %}"><span class="glyphicon glyphicon-home"></span> Home</a></li>
-                <li><a href="#" id="loginButton"><span class="glyphicon glyphicon-pencil"></span> New Pun</a></li>
-                <li><a href="{% url 'settings' %}"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
-                {#                <li><a href="#"><span class="glyphicon glyphicon-user"></span> Login</a></li>#}
-                <li><a href="{% url 'profile' %}"><span><img src="{% static 'images/leonardo-dicaprio.jpg' %}"
-                                                             class="img-circle" width="40px"></span> Leonardo</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="#" id="newPunButton"><span class="glyphicon glyphicon-pencil"></span> New Pun</a></li>
+                    <li><a href="{% url 'settings' %}"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-remove"></span> Logout</a></li>
+                    <li><a href="{% url 'profile' %}"><span><img src="{% static 'images/leonardo-dicaprio.jpg' %}"
+                                                                 class="img-circle" width="40px"></span> Leonardo</a>
+                    </li>
+                {% else %}
+                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> Login</a></li>
+                {% endif %}
             </ul>
         </div>
     </div>

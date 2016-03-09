@@ -25,7 +25,7 @@ $(document).ready(function () {
     //});
 
     // Login button click handler
-    $('#loginButton').on('click', function () {
+    $('#newPunButton').on('click', function () {
         bootbox
             .dialog({
                 title: 'New Pun',

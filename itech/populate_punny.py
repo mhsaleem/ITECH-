@@ -82,28 +82,28 @@ def add_user_profile(user):
 
 def add_title(title, user):
     t = Title.objects.get_or_create(title=title)[0]
-    t.user = user
+    t.user.add(user)
     t.save()
     return t
 
 
 def add_badge(title, user):
     b = Badge.objects.get_or_create(title=title)[0]
-    b.user = user
+    b.user.add(user)
     b.save()
     return b
 
 
 def add_pun(text, owner, score=5):
     p = Pun.objects.get_or_create(text=text, owner=owner)[0]
-    p.score=score
+    p.score = score
     p.save()
     return p
 
 
 def add_tag(text, pun):
     t = Tag.objects.get_or_create(text=text)[0]
-    t.pun = pun
+    t.pun.add(pun)
     t.save()
     return t
 
