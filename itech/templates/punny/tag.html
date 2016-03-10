@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block body_block %}
+    {% if tag %}
+
+        <h2>Puns under #{{ tag.text }}</h2>
+
+        <ul class="timeline">
+
+        {% for pun in puns %}
+            {#                         <li class="list-group-item"><a href="{% url 'category'  category.slug %}">{{ category.name }}</a></li>#}
+            {% if forloop.counter|divisibleby:2 %}
+                <li class="timeline-inverted">
+                    {% else %}
+                <li>
+            {% endif %}
+        <div class="timeline-panel">
+            <div class="box">
+                <div class="up">&#9650;</div>
+                <div class="voteLabel">{{ pun.score }}</div>
+                <div class="down">&#9660;</div>
+
+            </div>
+            <div class="timeline-pun">
+                <h4>“{{ pun.text }}"</h4>
+            </div>
+
+            <div class="timeline-tags">
+                {% for tag in pun.tags.all %}
+                    <a href="search.html">#{{ tag.text }}</a>
+                {% endfor %}
+
+                {#                        <a href="search.html">#jesus</a> <a href="search.html">#christianity</a>#}
+                {#                        <a href="search.html">#bible</a>#}
+            </div>
+            <div class="timeline-user">
+                <div class="row">
+                        <span>
+                        <img class="userImage" src="https://33.media.tumblr.com/avatar_9b679cdc9a64_128.png">
+                    </span>
+                        <span>
+                        <p>
+                            <a href="search.html">{{ pun.owner }}
+                            </a>
+                        </p>
+                    </span>
+                </div>
+                <div class="row">
+                    <span class="label label-default"></span>
+                </div>
+            </div>
+            <div class="timeline-footer">
+                <p class="text-right">{{ pun.timeStamp }}</p>
+            </div>
+
+        </div>
+        </li>
+
+        {% endfor %}
+    {% else %}
+        <h2>There are currently no puns tagged with #{{ tag.text }}</h2>
+    {% endif %}
+
+<li class="clearfix no-float"></li>
+</ul>
+
+{% endblock %}

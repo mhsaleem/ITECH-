@@ -1,3 +1,4 @@
+import slug as slug
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render, render_to_response
@@ -22,7 +23,7 @@ def search(request):
         query_string = request.POST['q']
 
         #entry_query = punny_search.get_query(query_string, ['text', ])
-        tagged_puns = Pun.objects.filter(Q(tags__text__icontains=query_string))
+        puns = Pun.objects.filter(Q(tags__text__icontains=query_string))
 
         #puns = Pun.objects.filter(entry_query).order_by('-timeStamp')
 
@@ -32,10 +33,24 @@ def search(request):
 
 
     return render_to_response('punny/search-results.html',
-                              {'query_string': query_string, 'puns': tagged_puns},
+                              {'query_string': query_string, 'puns': puns},
                               context_instance=RequestContext(request))
 
     #return render(request, 'punny/search-results.html', context_dict)
+
+
+def tag_detail(request, tag_name_slug):
+    context_dict={}
+    try:
+        tag = Tag.objects.get(s=tag_name_slug)
+        puns = Pun.objects.filter(Q(tags__text__exact=tag.text))
+        context_dict['tag'] = tag
+        context_dict['puns'] = puns
+
+    except Tag.DoesNotExist:
+
+        pass
+    return render(request, 'punny/tag.html', context_dict)
 
 
 @login_required

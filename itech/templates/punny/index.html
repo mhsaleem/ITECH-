@@ -41,7 +41,6 @@
                         <ul class="nav masthead-nav">
                             <li class="active"><a href="#">Home</a></li>
                             <li><a href="{% url 'auth_login' %}">Login</a></li>
-                            <li><a href="{% url 'search' %}">Search</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -51,17 +50,20 @@
                 <img width="45%" height="45%" src="{% static 'images/Big.svg' %}">
                 <h1 class="cover-heading">Punny</h1>
                 <p class="lead">Welcome to Punny, the number one place to post, read and rate puns!</p>
-                <div id="custom-search-input">
-                    <div class="input-group col-md-12">
-                        <input type="text" class="  search-query form-control"
-                               placeholder="Search for a tag or a user"/>
+                <form class="navbar-form" action="/punny/search/" method="post">
+                    {% csrf_token %}
+                    <div id="custom-search-input">
+                        <div class="input-group col-md-12">
+                            <input type="text" class="  search-query form-control"
+                                   placeholder="Search for a tag or a user" id="_q" name="q"/>
                                 <span class="input-group-btn">
                                     <button class="btn btn-danger" type="button">
                                         <span class=" glyphicon glyphicon-search"></span>
                                     </button>
                                 </span>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
 
             <div class="row" style="padding-top: 50px">

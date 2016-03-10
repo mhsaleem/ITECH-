@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import UserManager
+from django.template.defaultfilters import slugify
 # Create your models here.
 
 
@@ -35,6 +36,10 @@ class Badge(models.Model):
 
 class Tag(models.Model):
     text = models.CharField(max_length=28, unique=True)
+    s = models.SlugField()
+    def save(self, *args, **kwargs):
+        self.s = slugify(self.text)
+        super(Tag, self).save(*args, **kwargs)
 
 
 class Pun(models.Model):

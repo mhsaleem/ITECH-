@@ -31,19 +31,19 @@ def populate():
     pun = add_pun(
         text="This is a pun",
         owner=user_profile,
-        tag=tag
+        tags=[tag]
     )
 
     pun = add_pun(
         text="Whiteboards are remarkable!",
         owner=user_profile,
-        tag=tag
+        tags=[tag]
     )
 
     pun = add_pun(
         text="Leif me alone....",
         owner=user_profile,
-        tag=tag
+        tags=[tag]
     )
 
     user_h = add_user('Hashim')
@@ -51,6 +51,7 @@ def populate():
     user_profile = add_user_profile(user_h)
 
     tag = add_tag("Jargpun")
+    otherTag = add_tag("pancake day")
 
     add_title(
         title="Grand Punmonster",
@@ -65,8 +66,9 @@ def populate():
     pun = add_pun(
         text="This is another pun",
         owner=user_profile,
-        tag=tag
+        tags=[tag, otherTag]
     )
+
 
     for b in Badge.objects.filter(user=user_r):
         print "- {0} - {1}".format(str(user_r), str(b))
@@ -104,10 +106,11 @@ def add_badge(title, user):
     return b
 
 
-def add_pun(text, owner, tag, score=5):
+def add_pun(text, owner, tags, score=5):
     p = Pun.objects.get_or_create(text=text, owner=owner)[0]
     p.score = score
-    p.tags.add(tag)
+    for tag in tags:
+        p.tags.add(tag)
     p.save()
     return p
 
