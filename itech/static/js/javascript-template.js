@@ -1,39 +1,14 @@
 $(document).ready(function () {
-    //$('#loginForm').formValidation({
-    //    framework: 'bootstrap',
-    //    icon: {
-    //        valid: 'glyphicon glyphicon-ok',
-    //        invalid: 'glyphicon glyphicon-remove',
-    //        validating: 'glyphicon glyphicon-refresh'
-    //    },
-    //    fields: {
-    //        username: {
-    //            validators: {
-    //                notEmpty: {
-    //                    message: 'The username is required'
-    //                }
-    //            }
-    //        },
-    //        password: {
-    //            validators: {
-    //                notEmpty: {
-    //                    message: 'The password is required'
-    //                }
-    //            }
-    //        }
-    //    }
-    //});
-
     // Login button click handler
     $('#newPunButton').on('click', function () {
         bootbox
             .dialog({
                 title: 'New Pun',
-                message: $('#loginForm'),
+                message: $('#newPunForm'),
                 show: false // We will show it manually later
             })
             .on('shown.bs.modal', function () {
-                $('#loginForm')
+                $('#newPunForm')
                     .show()       ;                      // Show the login form
                     //.formValidation('resetForm', true); // Reset form
             })
@@ -41,7 +16,7 @@ $(document).ready(function () {
                 // Bootbox will remove the modal (including the body which contains the login form)
                 // after hiding the modal
                 // Therefor, we need to backup the form
-                $('#loginForm').hide().appendTo('body');
+                $('#newPunForm').hide().appendTo('body');
             })
             .modal('show');
     });

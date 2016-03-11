@@ -8,39 +8,70 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.db.models import Q
+from django.contrib.auth.models import User
+from forms import PunForm
+import re
+import datetime
+
 
 # Create your views here.
 
+def process_pun_form(request):
+    form = PunForm(request.POST)
+    if form.is_valid():
+            #this is working, redirect needs fixed. But currently users do not have profiles automatically
+            pun = Pun(text=form.cleaned_data['puntext'],
+                      owner=UserProfile.objects.get(user=request.user),
+                      score=form.cleaned_data['score'],
+                      NSFW=form.cleaned_data['NSFW'],
+                      flagCount=form.cleaned_data['flagCount'])
+            tags = re.split("; |, ", form.tags)
+            for tag in tags:
+                pun.tags.add(tag)
+            pun.save()
+    return form
+
 def index(request):
-    return render(request, 'punny/index.html', {})
+    context = RequestContext(request)
+    user = request.user
+    if request.method == 'POST':
+        process_pun_form(request)
+    else:
+        form = PunForm()
+    context_dict = {'form':form}
+    context_dict['user'] = user
+    return render(request, 'punny/index.html', context_dict)
     # return render(request, 'punny/index.html', {})
 
 
 def search(request):
+    if request.method == 'POST':
+        form = process_pun_form(request)
+    else:
+        form = PunForm()
+    context_dict = {'form':form}
     query_string = ""
     puns = None
     if ('q' in request.POST) and request.POST['q'].strip():
         query_string = request.POST['q']
 
-        #entry_query = punny_search.get_query(query_string, ['text', ])
+        # entry_query = punny_search.get_query(query_string, ['text', ])
         puns = Pun.objects.filter(Q(tags__text__icontains=query_string))
 
-        #puns = Pun.objects.filter(entry_query).order_by('-timeStamp')
-
-
-    #puns = Pun.objects.order_by('-timeStamp')
-    #context_dict = {'puns': puns}
+        # puns = Pun.objects.filter(entry_query).order_by('-timeStamp')
+    context_dict['query_string'] = query_string
+    context_dict['puns'] = puns
 
 
     return render_to_response('punny/search-results.html',
-                              {'query_string': query_string, 'puns': puns},
+                              context_dict,
                               context_instance=RequestContext(request))
 
-    #return render(request, 'punny/search-results.html', context_dict)
+    # return render(request, 'punny/search-results.html', context_dict)
 
 
 def tag_detail(request, tag_name_slug):
-    context_dict={}
+    context_dict = {}
     try:
         tag = Tag.objects.get(s=tag_name_slug)
         puns = Pun.objects.filter(Q(tags__text__exact=tag.text))
@@ -53,9 +84,22 @@ def tag_detail(request, tag_name_slug):
     return render(request, 'punny/tag.html', context_dict)
 
 
-@login_required
-def userProfile(request):
-    return render(request, 'punny/user-profile.html', {})
+def user_profile(request, username):
+    context_dict = {}
+    try:
+        u = User.objects.get(username=username)
+        up = UserProfile.objects.filter(user__username__exact=username)
+        title = Title.objects.filter(user__user=u)
+        puns = Pun.objects.filter(Q(owner__user=u))
+
+        context_dict['user'] = u
+        context_dict['userprofile'] = up
+        context_dict['t'] = title
+        context_dict['puns'] = puns
+
+    except UserProfile.DoesNotExist:
+        pass
+    return render(request, 'punny/profile.html', context_dict)
 
 
 @login_required

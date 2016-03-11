@@ -23,6 +23,15 @@
 
     <!-- Custom styles for this template -->
     <link href="{% static 'css/bootstrap-homepage.css' %}" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script src="//oss.maxcdn.com/bootbox/4.2.0/bootbox.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="http://sliptree.github.io/bootstrap-tokenfield/dist/bootstrap-tokenfield.js"
+            charset="UTF-8"></script>
+    <script type="text/javascript" src="{% static 'js/javascript-template.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.fonticonpicker.min.js' %}"></script>
 
 </head>
 
@@ -40,7 +49,14 @@
                     <nav>
                         <ul class="nav masthead-nav">
                             <li class="active"><a href="#">Home</a></li>
-                            <li><a href="{% url 'auth_login' %}">Login</a></li>
+                            {% if user.is_authenticated %}
+                                <li><a href="#" id="newPunButton"><span class="glyphicon glyphicon-pencil"></span></a></li>
+                                <li><a href="profile/{{ user.username }}"><span><img
+                                        src="{{ user.userprofile.picture }}"
+                                        class="img-circle" width="40px"></span> {{ user.username }}</a>
+                                    {% else %}
+                                <li><a href="{% url 'auth_login' %}">Login</a></li>
+                            {% endif %}
                         </ul>
                     </nav>
                 </div>
@@ -103,8 +119,47 @@
 
     </div>
 
+<div class="col-sm-12 col-md-15 main" style="background-color: transparent">
+    <div>
+        <form id="newPunForm" method="post" class="form-horizontal"
+              style="display: none; padding-left: 2%; padding-right: 2%" action="/punny/">
+            {% csrf_token %}
+            <div class="form-group" style="color: #999999;">
+                    {{ form.puntext }}
+                <label id="count" style="padding-top: 5px;">Characters left: 350</label>
+
+                {{ form.tags }}
+                <script>
+                    $('#tokenfield').tokenfield({
+                        autocomplete: {
+                            source: [],
+                            delay: 100
+                        },
+                        showAutocompleteOnFocus: true
+                    })
+                </script>
+
+                <label style="padding-top: 10px;">
+                    {{ form.NSFW }}
+                    Pun is NSFW
+                </label>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-default">Post</button>
+            </div>
+        </form>
+
+        {% block body_block %}
+
+
+        {% endblock %}
+    </div>
 </div>
 
+
+</div>
+</div>
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->

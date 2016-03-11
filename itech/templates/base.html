@@ -88,9 +88,9 @@
                 {% if user.is_authenticated %}
                     <li><a href="#" id="newPunButton"><span class="glyphicon glyphicon-pencil"></span> New Pun</a></li>
                     <li><a href="{% url 'settings' %}"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-remove"></span> Logout</a></li>
-                    <li><a href="{% url 'profile' %}"><span><img src="{% static 'images/leonardo-dicaprio.jpg' %}"
-                                                                 class="img-circle" width="40px"></span> Leonardo</a>
+                    <li><a href="{% url 'auth_logout' %}?next=/punny/"><span class="glyphicon glyphicon-remove"></span> Logout</a></li>
+{#                    <li><a href="{% url 'profile' %}"><span><img src="{% static 'images/leonardo-dicaprio.jpg' %}"#}
+{#                                                                 class="img-circle" width="40px"></span> Leonardo</a>#}
                     </li>
                 {% else %}
                     <li><a href="#"><span class="glyphicon glyphicon-user"></span> Login</a></li>
@@ -102,17 +102,14 @@
 
 <div class="col-sm-12 col-md-15 main" style="background-color: transparent">
     <div>
-        <form id="loginForm" method="post" class="form-horizontal"
-              style="display: none; padding-left: 2%; padding-right: 2%">
+        <form id="newPunForm" method="post" class="form-horizontal"
+              style="display: none; padding-left: 2%; padding-right: 2%" action="/punny/">
             {% csrf_token %}
             <div class="form-group" style="color: #999999;">
-                    <textarea class="form-control" rows="5" id="punBody"
-                              placeholder="Insert your pun here.."></textarea>
+                    {{ form.puntext }}
                 <label id="count" style="padding-top: 5px;">Characters left: 350</label>
 
-                <input type="text" class="form-control" id="tokenfield"
-                       placeholder="Insert tags.."
-                       style="width: 100%;"/>
+                {{ form.tags }}
                 <script>
                     $('#tokenfield').tokenfield({
                         autocomplete: {
@@ -124,7 +121,7 @@
                 </script>
 
                 <label style="padding-top: 10px;">
-                    <input type="checkbox" value="">
+                    {{ form.NSFW }}
                     Pun is NSFW
                 </label>
             </div>
