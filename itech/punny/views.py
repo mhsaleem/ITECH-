@@ -38,7 +38,7 @@ def process_pun_form(request):
     return form
 
 
-def index(request):Pu
+def index(request):
     context = RequestContext(request)
     user = request.user
     if request.method == 'POST':
