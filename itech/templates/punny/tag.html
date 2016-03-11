@@ -2,6 +2,8 @@
 
 {% load staticfiles %}
 
+{% block title %} posts with the tag {{ tag.text }}{%  endblock %}
+
 {% block body_block %}
     {% if tag %}
 
