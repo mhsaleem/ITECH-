@@ -19,26 +19,33 @@ import datetime
 def process_pun_form(request):
     form = PunForm(request.POST)
     if form.is_valid():
-            #this is working, redirect needs fixed. But currently users do not have profiles automatically
-            pun = Pun(text=form.cleaned_data['puntext'],
-                      owner=UserProfile.objects.get(user=request.user),
-                      score=form.cleaned_data['score'],
-                      NSFW=form.cleaned_data['NSFW'],
-                      flagCount=form.cleaned_data['flagCount'])
-            tags = re.split("; |, ", form.tags)
-            for tag in tags:
-                pun.tags.add(tag)
-            pun.save()
+        # this is working, redirect needs fixed. But currently users do not have profiles automatically
+        tags = re.split("; |, ", form.cleaned_data['tags'])
+        # converting text to tag objects
+        tagObjs = []
+        for tag in tags:
+            tagObjs.append(Tag.objects.get_or_create(text=tag)[0])
+
+        pun = Pun(text=form.cleaned_data['puntext'],
+                  owner=request.user,
+                  score=0,
+                  NSFW=form.cleaned_data['NSFW'],
+                  flagCount=0)
+        pun.save()
+        for tag in tagObjs:
+            pun.tags.add(tag)
+            # adding tag objects to the pun
     return form
 
-def index(request):
+
+def index(request):Pu
     context = RequestContext(request)
     user = request.user
     if request.method == 'POST':
-        process_pun_form(request)
+        form = process_pun_form(request)
     else:
         form = PunForm()
-    context_dict = {'form':form}
+    context_dict = {'form': form}
     context_dict['user'] = user
     return render(request, 'punny/index.html', context_dict)
     # return render(request, 'punny/index.html', {})
@@ -49,7 +56,7 @@ def search(request):
         form = process_pun_form(request)
     else:
         form = PunForm()
-    context_dict = {'form':form}
+    context_dict = {'form': form}
     query_string = ""
     puns = None
     if ('q' in request.POST) and request.POST['q'].strip():
@@ -58,10 +65,8 @@ def search(request):
         # entry_query = punny_search.get_query(query_string, ['text', ])
         puns = Pun.objects.filter(Q(tags__text__icontains=query_string))
 
-        # puns = Pun.objects.filter(entry_query).order_by('-timeStamp')
     context_dict['query_string'] = query_string
     context_dict['puns'] = puns
-
 
     return render_to_response('punny/search-results.html',
                               context_dict,
@@ -90,7 +95,7 @@ def user_profile(request, username):
         u = User.objects.get(username=username)
         up = UserProfile.objects.filter(user__username__exact=username)
         title = Title.objects.filter(user__user=u)
-        puns = Pun.objects.filter(Q(owner__user=u))
+        puns = Pun.objects.filter(Q(owner=u))
 
         context_dict['user'] = u
         context_dict['userprofile'] = up

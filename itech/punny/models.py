@@ -44,7 +44,7 @@ class Tag(models.Model):
 
 class Pun(models.Model):
     text = models.CharField(max_length=350)
-    owner = models.ForeignKey(UserProfile, related_name='owner')
+    owner = models.ForeignKey(User, related_name='owner')
     score = models.IntegerField(default=0)
     timeStamp = models.DateTimeField(auto_now_add=True)
     flagCount = models.IntegerField(default=0)
