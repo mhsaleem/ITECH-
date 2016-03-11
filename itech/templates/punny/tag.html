@@ -29,7 +29,7 @@
 
             <div class="timeline-tags">
                 {% for tag in pun.tags.all %}
-                    <a href="search.html">#{{ tag.text }}</a>
+                    <a href="/punny/tag/{{ tag.text }}">#{{ tag.text }}</a>
                 {% endfor %}
 
                 {#                        <a href="search.html">#jesus</a> <a href="search.html">#christianity</a>#}

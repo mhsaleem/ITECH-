@@ -63,7 +63,7 @@ def search(request):
         query_string = request.POST['q']
 
         # entry_query = punny_search.get_query(query_string, ['text', ])
-        puns = Pun.objects.filter(Q(tags__text__icontains=query_string))
+        puns = Pun.objects.filter(Q(tags__text__exact=query_string))
 
     context_dict['query_string'] = query_string
     context_dict['puns'] = puns
