@@ -48,6 +48,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'punny',
     'registration',
+    'updown',
 )
 
 MIDDLEWARE_CLASSES = [

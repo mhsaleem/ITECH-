@@ -6,38 +6,49 @@
 
 {% block body_block %}
 
-    <h2>Search results for "{{ query_string }}"</h2>
+    {% if puns %}
+        <h2>Search results for "{{ query_string }}"</h2>
+        <ul class="timeline">
 
-    <ul class="timeline">
-
-        {% for pun in puns %}
-            {#                         <li class="list-group-item"><a href="{% url 'category'  category.slug %}">{{ category.name }}</a></li>#}
-            {% if forloop.counter|divisibleby:2 %}
-                <li class="timeline-inverted">
+            {% for pun in puns %}
+                {#                         <li class="list-group-item"><a href="{% url 'category'  category.slug %}">{{ category.name }}</a></li>#}
+                {% if forloop.counter|divisibleby:2 %}
+                    <li class="timeline-inverted">
+                        {% else %}
+                    <li>
+                {% endif %}
+            <div class="timeline-panel">
+                <div class="box">
+                    {% if pun.upvoted == True %}
+                        <div style="color: lightgreen!important;">&#9650;</div>
+                        <div class="voteLabel" id="score">{{ pun.score }}</div>
+                        <a href="/punny/{{ pun.id }}/rate/-1" class="down">&#9660;</a>
+                    {% elif pun.downvoted == True %}
+                        <a href="/punny/{{ pun.id }}/rate/1" class="up">&#9650;</a>
+                        <div class="voteLabel" id="score">{{ pun.score }}</div>
+                        <div style="color: lightgreen!important;">&#9660;</div>
                     {% else %}
-                <li>
-            {% endif %}
-        <div class="timeline-panel">
-            <div class="box">
-                <div class="up">&#9650;</div>
-                <div class="voteLabel">{{ pun.score }}</div>
-                <div class="down">&#9660;</div>
+                        <a href="/punny/{{ pun.id }}/rate/1" class="up">&#9650;</a>
+                        <div class="voteLabel" id="score">{{ pun.rating.likes }}</div>
+                        <a href="/punny/{{ pun.id }}/rate/-1" class="down">&#9660;</a>
+                    {% endif %}
 
-            </div>
-            <div class="timeline-pun">
-                <h4>“{{ pun.text }}"</h4>
-            </div>
 
-            <div class="timeline-tags">
-                {% for tag in pun.tags.all %}
-                    <a href="/punny/tag/{{ tag.text }}">#{{ tag.text }}</a>
-                {% endfor %}
+                </div>
+                <div class="timeline-pun">
+                    <h4>“{{ pun.text }}"</h4>
+                </div>
 
-                {#                        <a href="search.html">#jesus</a> <a href="search.html">#christianity</a>#}
-                {#                        <a href="search.html">#bible</a>#}
-            </div>
-            <div class="timeline-user">
-                <div class="row">
+                <div class="timeline-tags">
+                    {% for tag in pun.tags.all %}
+                        <a href="/punny/tag/{{ tag.text }}">#{{ tag.text }}</a>
+                    {% endfor %}
+
+                    {#                        <a href="search.html">#jesus</a> <a href="search.html">#christianity</a>#}
+                    {#                        <a href="search.html">#bible</a>#}
+                </div>
+                <div class="timeline-user">
+                    <div class="row">
                         <span>
                         <img class="userImage" src="https://33.media.tumblr.com/avatar_9b679cdc9a64_128.png">
                     </span>
@@ -47,61 +58,19 @@
                             </a>
                         </p>
                     </span>
+                    </div>
+                    <div class="row">
+                        <span class="label label-default"></span>
+                    </div>
                 </div>
-                <div class="row">
-                    <span class="label label-default"></span>
+                <div class="timeline-footer">
+                    <p class="text-right">{{ pun.timeStamp }}</p>
                 </div>
             </div>
-            <div class="timeline-footer">
-                <p class="text-right">{{ pun.timeStamp }}</p>
-            </div>
-
-        </div>
-        </li>
-
-        {% endfor %}
-{#        <li>#}
-{#            <div class="timeline-panel">#}
-{#                <div class="box">#}
-{#                    <div class="up">&#9650;</div>#}
-{#                    <div class="voteLabel">5</div>#}
-{#                    <div class="down">&#9660;</div>#}
-{##}
-{#                </div>#}
-{#                <div class="timeline-pun">#}
-{#                    <h4>“And Jesus said unto John - 'come forth and receive eternal glory'. But John came fifth and#}
-{#                        won#}
-{#                        a toaster"</h4>#}
-{#                </div>#}
-{##}
-{#                <div class="timeline-tags">#}
-{#                    <a href="search.html">#religion</a> <a href="search.html">#jesus</a> <a href="search.html">#christianity</a>#}
-{#                    <a href="search.html">#bible</a>#}
-{#                </div>#}
-{#                <div class="timeline-user">#}
-{#                    <div class="row">#}
-{#                        <span>#}
-{#                        <img class="userImage" src="https://33.media.tumblr.com/avatar_9b679cdc9a64_128.png">#}
-{#                    </span>#}
-{#                        <span>#}
-{#                        <p>#}
-{#                            <a href="search.html">Reese Withoutherspoon#}
-{#                            </a>#}
-{#                        </p>#}
-{#                    </span>#}
-{#                    </div>#}
-{#                    <div class="row">#}
-{#                        <span class="label label-default">Grand Punmaster</span>#}
-{#                    </div>#}
-{#                </div>#}
-{#                <div class="timeline-footer">#}
-{#                    <p class="text-right">Feb-21-2014</p>#}
-{#                </div>#}
-{##}
-{#            </div>#}
-{#        </li>#}
-
-        <li class="clearfix no-float"></li>
-    </ul>
-
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <h2>No Puns under the tag #{{ query_string }}</h2>
+    {% endif %}
 {% endblock %}

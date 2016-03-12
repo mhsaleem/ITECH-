@@ -1,4 +1,7 @@
 import os
+
+import datetime
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'itech.settings')
 
 import django
@@ -31,19 +34,22 @@ def populate():
     pun = add_pun(
         text="This is a pun",
         owner=user_r,
-        tags=[tag]
+        tags=[tag],
+        score=5,
     )
 
     pun = add_pun(
         text="Whiteboards are remarkable!",
         owner=user_r,
-        tags=[tag]
+        tags=[tag],
+        score=5,
     )
 
     pun = add_pun(
         text="Leif me alone....",
         owner=user_r,
-        tags=[tag]
+        tags=[tag],
+        score=5,
     )
 
     user_h = add_user('hashim', 'hashim')
@@ -66,8 +72,11 @@ def populate():
     pun = add_pun(
         text="This is another pun",
         owner=user_h,
-        tags=[tag, otherTag]
+        tags=[tag, otherTag],
+        score=5,
     )
+
+    oldPun = add_pun("old pun high score", user_h, [tag], 10)
 
 
     for b in Badge.objects.filter(user=user_r):
@@ -109,7 +118,7 @@ def add_badge(title, user):
     return b
 
 
-def add_pun(text, owner, tags, score=5):
+def add_pun(text, owner, tags, score):
     p = Pun.objects.get_or_create(text=text, owner=owner)[0]
     p.score = score
     for tag in tags:

@@ -88,8 +88,6 @@
                     <li><a href="#" id="newPunButton"><span class="glyphicon glyphicon-pencil"></span> New Pun</a></li>
                     <li><a href="{% url 'settings' %}"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
                     <li><a href="{% url 'auth_logout' %}?next=/punny/"><span class="glyphicon glyphicon-remove"></span> Logout</a></li>
-{#                    <li><a href="{% url 'profile' %}"><span><img src="{% static 'images/leonardo-dicaprio.jpg' %}"#}
-{#                                                                 class="img-circle" width="40px"></span> Leonardo</a>#}
                     </li>
                 {% else %}
                     <li><a href="#"><span class="glyphicon glyphicon-user"></span> Login</a></li>
@@ -102,7 +100,7 @@
 <div class="col-sm-12 col-md-15 main" style="background-color: transparent">
     <div>
         <form id="newPunForm" method="post" class="form-horizontal"
-              style="display: none; padding-left: 2%; padding-right: 2%" action="/punny/">
+              style="display: none; padding-left: 2%; padding-right: 2%" action="">
             {% csrf_token %}
             <div class="form-group" style="color: #999999;">
                     {{ form.puntext }}
@@ -130,13 +128,11 @@
             </div>
         </form>
 
-        {% block body_block %}
 
-
-        {% endblock %}
     </div>
 </div>
-</div>
+{% block body_block %}
+{% endblock %}
 
 
 <!-- Bootstrap core JavaScript

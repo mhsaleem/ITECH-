@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import UserManager
 from django.template.defaultfilters import slugify
-# Create your models here.
+from updown.fields import RatingField
 
 
 class UserProfile(models.Model):
@@ -45,12 +45,11 @@ class Tag(models.Model):
 class Pun(models.Model):
     text = models.CharField(max_length=350)
     owner = models.ForeignKey(User, related_name='owner')
-    score = models.IntegerField(default=0)
     timeStamp = models.DateTimeField(auto_now_add=True)
     flagCount = models.IntegerField(default=0)
     NSFW = models.BooleanField(default=False)
     tags = models.ManyToManyField(Tag)
-    userVote = models.ManyToManyField(UserProfile, related_name='voted_user')
+    rating = RatingField(can_change_vote=True)
 
     def __unicode__(self):
         return self.text

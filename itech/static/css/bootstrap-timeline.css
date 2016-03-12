@@ -243,18 +243,9 @@ span {
   color: lightgrey;
 }
 
-.up:hover {
-  color: slategray;
-
-}
-
-
 .down {
   color: lightgrey;
 
 }
 
-.down:hover {
-    color: slategray;
 
-}
