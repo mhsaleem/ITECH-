@@ -31,6 +31,6 @@ urlpatterns = patterns('',
                        url(r'^admin/', include(admin.site.urls)),
                        url(r'^punny/', include('punny.urls')),
                        # url(r'^accounts/register/$', MyRegistrationView.as_view(), name='registration_register'),
-                       url(r'^accounts/', include('registration.backends.simple.urls'), )  # ADD THIS NEW TUPLE!
+
 
                        )
