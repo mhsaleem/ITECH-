@@ -1,4 +1,5 @@
 import slug as slug
+from django.template.defaultfilters import slugify
 from watson import search as watson
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -39,6 +40,34 @@ def process_pun_form(request):
     return form
 
 
+def setUpDownVotes(request, puns):
+    if puns != None:
+        for pun in puns:
+            pun.score = pun.rating.likes - pun.rating.dislikes
+            x = pun.rating.get_rating_for_user(request.user)
+            if x == 1:
+                pun.upvoted = True
+            elif x == -1:
+                pun.downvoted = True
+    return puns
+
+
+def orderQuerySetByPunScore(puns):
+    for pun in puns:
+        pun.score = pun.rating_likes - pun.rating_dislikes
+    puns = sorted(puns, key=operator.attrgetter('score'), reverse=True)
+    return puns
+
+
+def getTopPunInPastDays(days=1):
+    now = datetime.datetime.now()
+    startDay = now - timedelta(days=days)
+    puns = Pun.objects.filter(timeStamp__range=(startDay, now))
+    puns = orderQuerySetByPunScore(puns)
+    topPun = puns[0]
+    return topPun
+
+
 def index(request):
     user = request.user
     if request.method == 'POST':
@@ -51,24 +80,9 @@ def index(request):
     context_dict['search_form'] = SearchForm()
     now = datetime.datetime.now()
 
-    startDay = now - timedelta(days=1)
-    startWeek = now - timedelta(days=7)
-    startMonth = now - timedelta(days=30)
-    today = Pun.objects.filter(timeStamp__range=(startDay, now))
-    week = Pun.objects.filter(timeStamp__range=(startWeek, now))
-    month = Pun.objects.filter(timeStamp__range=(startMonth, now))
-    for p in today:
-        p.score = p.rating_likes - p.rating_dislikes
-    for p in week:
-        p.score = p.rating_likes - p.rating_dislikes
-    for p in month:
-        p.score = p.rating_likes - p.rating_dislikes
-    today = sorted(today, key=operator.attrgetter('score'), reverse=True)[0]
-    week = sorted(week, key=operator.attrgetter('score'), reverse=True)[0]
-    month = sorted(month, key=operator.attrgetter('score'), reverse=True)[0]
-    context_dict['today'] = today
-    context_dict['week'] = week
-    context_dict['month'] = month
+    context_dict['today'] = getTopPunInPastDays(1)
+    context_dict['week'] = getTopPunInPastDays(7)
+    context_dict['month'] = getTopPunInPastDays(30)
     return render(request, 'punny/index.html', context_dict)
 
 
@@ -87,16 +101,10 @@ def search(request):
         query_string = data['search']
         puns = watson.filter(Pun, query_string)
 
+    puns = setUpDownVotes(request, puns)
+    puns = orderQuerySetByPunScore(puns)
     context_dict['query_string'] = query_string
     context_dict['puns'] = puns
-    if puns != None:
-        for pun in puns:
-            pun.score = pun.rating.likes - pun.rating.dislikes
-            x = pun.rating.get_rating_for_user(request.user)
-            if x == 1:
-                pun.upvoted = True
-            elif x == -1:
-                pun.downvoted = True
 
     return render_to_response('punny/search-results.html',
                               context_dict,
@@ -112,15 +120,17 @@ def tag_detail(request, tag_name_slug):
         form = PunForm()
     context_dict = {'new_pun_form': form, 'search_form': SearchForm()}
     try:
+        tag_name_slug = slugify(tag_name_slug)
         tag = Tag.objects.get(s=tag_name_slug)
         puns = Pun.objects.filter(Q(tags__text__exact=tag.text))
         for pun in puns:
-            pun.score = pun.rating.likes - pun.rating.dislikes
+            pun.score = pun.rating_likes - pun.rating_dislikes
+        puns = setUpDownVotes(request, puns)
+        puns = orderQuerySetByPunScore(puns)
         context_dict['tag'] = tag
         context_dict['puns'] = puns
 
     except Tag.DoesNotExist:
-
         pass
     return render(request, 'punny/tag.html', context_dict)
 
@@ -138,7 +148,8 @@ def user_profile(request, username):
         puns = Pun.objects.filter(Q(owner=u))
         for pun in puns:
             pun.score = pun.rating.likes - pun.rating.dislikes
-
+        puns = setUpDownVotes(request, puns)
+        puns = orderQuerySetByPunScore(puns)
         context_dict['user'] = u
         context_dict['userprofile'] = up
         context_dict['t'] = title

@@ -54,7 +54,7 @@
                     </span>
                         <span>
                         <p>
-                            <a href="search.html">{{ pun.owner.username }}
+                            <a href="/punny/profile/{{ pun.owner.username }}">{{ pun.owner.username }}
                             </a>
                         </p>
                     </span>
@@ -71,6 +71,6 @@
             {% endfor %}
         </ul>
     {% else %}
-        <h2>No Puns under the tag #{{ query_string }}</h2>
+        <h2>No search results for "{{ query_string }}"</h2>
     {% endif %}
 {% endblock %}

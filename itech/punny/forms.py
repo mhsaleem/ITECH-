@@ -27,6 +27,6 @@ class SearchForm(forms.Form):
         attrs={
             'class': 'search-query form-control',
             'name': 'q',
-            'placeholder': 'Search for a tag or a user'
+            'placeholder': 'Search punny..'
         }
     ), max_length=100)

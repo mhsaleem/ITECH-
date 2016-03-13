@@ -7,5 +7,4 @@ class PunnyAppConfig(AppConfig):
 
     def ready(self):
         pun = self.get_model("Pun")
-        watson.register(pun, fields=("text", "owner"))
-        print("REGISTERING PUN")
+        watson.register(pun, fields=("text", "owner", "tags__text"))

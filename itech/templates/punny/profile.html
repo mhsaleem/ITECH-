@@ -92,9 +92,20 @@
                 {% endif %}
             <div class="timeline-panel">
                 <div class="box">
-                    <div class="up">&#9650;</div>
-                    <div class="voteLabel">{{ pun.score }}</div>
-                    <div class="down">&#9660;</div>
+                    {% if pun.upvoted == True %}
+                        <div style="color: lightgreen!important;">&#9650;</div>
+                        <div class="voteLabel" id="score">{{ pun.score }}</div>
+                        <a href="/punny/{{ pun.id }}/rate/-1" class="down">&#9660;</a>
+                    {% elif pun.downvoted == True %}
+                        <a href="/punny/{{ pun.id }}/rate/1" class="up">&#9650;</a>
+                        <div class="voteLabel" id="score">{{ pun.score }}</div>
+                        <div style="color: lightcoral!important;">&#9660;</div>
+                    {% else %}
+                        <a href="/punny/{{ pun.id }}/rate/1" class="up">&#9650;</a>
+                        <div class="voteLabel" id="score">{{ pun.rating.likes }}</div>
+                        <a href="/punny/{{ pun.id }}/rate/-1" class="down">&#9660;</a>
+                    {% endif %}
+
 
                 </div>
                 <div class="timeline-pun">
@@ -103,7 +114,7 @@
 
                 <div class="timeline-tags">
                     {% for tag in pun.tags.all %}
-                        <a href="search.html">#{{ tag.text }}</a>
+                        <a href="/punny/tag/{{ tag.text }}">#{{ tag.text }}</a>
                     {% endfor %}
 
                     {#                        <a href="search.html">#jesus</a> <a href="search.html">#christianity</a>#}
@@ -112,11 +123,11 @@
                 <div class="timeline-user">
                     <div class="row">
                         <span>
-                        <img class="userImage" src="{{ userprofile.picture }}">
+                        <img class="userImage" src="https://33.media.tumblr.com/avatar_9b679cdc9a64_128.png">
                     </span>
                         <span>
                         <p>
-                            <a href="search.html">{{ pun.owner }}
+                            <a href="search.html">{{ pun.owner.username }}
                             </a>
                         </p>
                     </span>
@@ -128,7 +139,6 @@
                 <div class="timeline-footer">
                     <p class="text-right">{{ pun.timeStamp }}</p>
                 </div>
-
             </div>
             </li>
 
