@@ -56,11 +56,10 @@
                      style="max-width:35px;">
             </a>
             <div class="input-group" style="padding-top: 8px;">
-                <form class="navbar-form" action="/punny/search/" method="post">
+                <form class="navbar-form" action="{% url 'search' %}">
                     {% csrf_token %}
                     <div class="input-group">
-                        <input type="text" class="form-control" id="id_q" name="q"
-                               placeholder="Search for a tag"/>
+                        {{ search_form.search }}
                         <div class="input-group-btn">
                             <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i>
                             </button>
@@ -103,10 +102,10 @@
               style="display: none; padding-left: 2%; padding-right: 2%" action="">
             {% csrf_token %}
             <div class="form-group" style="color: #999999;">
-                    {{ form.puntext }}
+                    {{ new_pun_form.puntext }}
                 <label id="count" style="padding-top: 5px;">Characters left: 350</label>
 
-                {{ form.tags }}
+                {{ new_pun_form.tags }}
                 <script>
                     $('#tokenfield').tokenfield({
                         autocomplete: {
@@ -118,7 +117,7 @@
                 </script>
 
                 <label style="padding-top: 10px;">
-                    {{ form.NSFW }}
+                    {{ new_pun_form.NSFW }}
                     Pun is NSFW
                 </label>
             </div>

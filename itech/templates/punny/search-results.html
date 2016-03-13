@@ -26,7 +26,7 @@
                     {% elif pun.downvoted == True %}
                         <a href="/punny/{{ pun.id }}/rate/1" class="up">&#9650;</a>
                         <div class="voteLabel" id="score">{{ pun.score }}</div>
-                        <div style="color: lightgreen!important;">&#9660;</div>
+                        <div style="color: lightcoral!important;">&#9660;</div>
                     {% else %}
                         <a href="/punny/{{ pun.id }}/rate/1" class="up">&#9650;</a>
                         <div class="voteLabel" id="score">{{ pun.rating.likes }}</div>

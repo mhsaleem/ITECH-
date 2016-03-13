@@ -19,6 +19,14 @@ class PunForm(forms.Form):
         }
     ), required=False)
     NSFW = forms.BooleanField(required=False)
-    score = forms.IntegerField(widget=forms.HiddenInput(), initial=0, required=False)
     flagCount = forms.IntegerField(widget=forms.HiddenInput(), initial=0, required=False)
 
+
+class SearchForm(forms.Form):
+    search = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'class': 'search-query form-control',
+            'name': 'q',
+            'placeholder': 'Search for a tag or a user'
+        }
+    ), max_length=100)

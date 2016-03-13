@@ -53,9 +53,3 @@ class Pun(models.Model):
 
     def __unicode__(self):
         return self.text
-
-
-
-
-    def __unicode__(self):
-        return self.text

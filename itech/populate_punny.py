@@ -22,7 +22,7 @@ def populate():
         user=user_profile
     )
 
-    tag = add_tag(
+    tag0 = add_tag(
         text="Religpun",
     )
 
@@ -34,21 +34,21 @@ def populate():
     pun = add_pun(
         text="This is a pun",
         owner=user_r,
-        tags=[tag],
+        tags=[tag0],
         score=5,
     )
 
     pun = add_pun(
         text="Whiteboards are remarkable!",
         owner=user_r,
-        tags=[tag],
+        tags=[tag0],
         score=5,
     )
 
     pun = add_pun(
         text="Leif me alone....",
         owner=user_r,
-        tags=[tag],
+        tags=[tag0],
         score=5,
     )
 
@@ -56,8 +56,9 @@ def populate():
 
     user_profile = add_user_profile(user_h)
 
-    tag = add_tag("Jargpun")
-    otherTag = add_tag("pancake day")
+    tag0 = add_tag("Jargpun")
+    tag1 = add_tag("a")
+    tag2 = add_tag("pancake day")
 
     add_title(
         title="Grand Punmonster",
@@ -72,11 +73,12 @@ def populate():
     pun = add_pun(
         text="This is another pun",
         owner=user_h,
-        tags=[tag, otherTag],
+        tags=[tag0, tag2],
         score=5,
     )
 
-    oldPun = add_pun("old pun high score", user_h, [tag], 10)
+    oldPun = add_pun("Punday high score", user_h, [tag0], 20)
+    oldPun = add_pun("Pun to be downvoted", user_h, [tag0, tag1, tag2], 20)
 
 
     for b in Badge.objects.filter(user=user_r):
@@ -85,8 +87,8 @@ def populate():
         print "- {0} - {1}".format(str(user_r), str(t))
     for p in Pun.objects.filter(owner=user_r):
         print "- {0} - {1}".format(str(user_r), str(p))
-        for tag in Tag.objects.filter(pun__tags__pun=p):
-            print "- {0}".format('#'+str(tag.text)+", ")
+        for tag0 in Tag.objects.filter(pun__tags__pun=p):
+            print "- {0}".format('#'+str(tag0.text)+", ")
         # for t in Tag.objects.filter(pun=p):
         #     print "-- {0} - {1}".format(str(p), str(t))
 
@@ -120,7 +122,7 @@ def add_badge(title, user):
 
 def add_pun(text, owner, tags, score):
     p = Pun.objects.get_or_create(text=text, owner=owner)[0]
-    p.score = score
+    p.rating_likes = score
     for tag in tags:
         p.tags.add(tag)
     p.save()

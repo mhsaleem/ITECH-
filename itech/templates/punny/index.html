@@ -46,7 +46,8 @@
                         <ul class="nav masthead-nav">
                             <li class="active"><a href="#">Home</a></li>
                             {% if user.is_authenticated %}
-                                <li><a href="#" id="newPunButton"><span class="glyphicon glyphicon-pencil"></span></a></li>
+                                <li><a href="#" id="newPunButton"><span class="glyphicon glyphicon-pencil"></span></a>
+                                </li>
                                 <li><a href="profile/{{ user.username }}"><span><img
                                         src="{{ user.userprofile.picture }}"
                                         class="img-circle" width="40px"></span> {{ user.username }}</a>
@@ -61,17 +62,16 @@
                 <img width="45%" height="45%" src="{% static 'images/Big.svg' %}">
                 <h1 class="cover-heading">Punny</h1>
                 <p class="lead">Welcome to Punny, the number one place to post, read and rate puns!</p>
-                <form class="navbar-form" action="/punny/search/" method="post">
+                <form class="navbar-form" action="{% url 'search' %}">
                     {% csrf_token %}
                     <div id="custom-search-input">
                         <div class="input-group col-md-12">
-                            <input type="text" class="  search-query form-control"
-                                   placeholder="Search for a tag or a user" id="_q" name="q"/>
-                                <span class="input-group-btn">
-                                    <button class="btn btn-danger" type="button">
-                                        <span class=" glyphicon glyphicon-search"></span>
-                                    </button>
-                                </span>
+                            {{ search_form.search }}
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-danger" type="submit">
+                                                        <span class=" glyphicon glyphicon-search"></span>
+                                                    </button>
+                                                </span>
                         </div>
                     </div>
                 </form>
@@ -108,40 +108,40 @@
 
     </div>
 
-<div class="col-sm-12 col-md-15 main postPun">
-    <div>
-        <form id="newPunForm" method="post" class="form-horizontal"
-              style="display: none; padding-left: 2%; padding-right: 2%" action="/punny/">
-            {% csrf_token %}
-            <div class="form-group" style="color: #999999;">
-                    {{ form.puntext }}
-                <label id="count" style="padding-top: 5px;">Characters left: 350</label>
+    <div class="col-sm-12 col-md-15 main postPun">
+        <div>
+            <form id="newPunForm" method="post" class="form-horizontal"
+                  style="display: none; padding-left: 2%; padding-right: 2%" action="/punny/">
+                {% csrf_token %}
+                <div class="form-group" style="color: #999999;">
+                    {{ new_pun_form.puntext }}
+                    <label id="count" style="padding-top: 5px;">Characters left: 350</label>
 
-                {{ form.tags }}
-                <script>
-                    $('#tokenfield').tokenfield({
-                        autocomplete: {
-                            source: [],
-                            delay: 100
-                        },
-                        showAutocompleteOnFocus: true
-                    })
-                </script>
+                    {{ new_pun_form.tags }}
+                    <script>
+                        $('#tokenfield').tokenfield({
+                            autocomplete: {
+                                source: [],
+                                delay: 100
+                            },
+                            showAutocompleteOnFocus: true
+                        })
+                    </script>
 
-                <label style="padding-top: 10px;">
-                    {{ form.NSFW }}
-                    Pun is NSFW
-                </label>
-            </div>
+                    <label style="padding-top: 10px;">
+                        {{ new_pun_form.NSFW }}
+                        Pun is NSFW
+                    </label>
+                </div>
 
-            <div class="form-group">
-                <button type="submit" class="btn btn-default">Post</button>
-            </div>
-        </form>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-default">Post</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
-{% block body_block %}
-{% endblock %}
+    {% block body_block %}
+    {% endblock %}
 
 </div>
 </div>

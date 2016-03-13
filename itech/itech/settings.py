@@ -49,6 +49,7 @@ INSTALLED_APPS = (
     'punny',
     'registration',
     'updown',
+    'watson',
 )
 
 MIDDLEWARE_CLASSES = [
