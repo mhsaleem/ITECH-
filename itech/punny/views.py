@@ -42,15 +42,16 @@ def process_pun_form(request):
 
 
 def setUpDownVotes(request, puns):
-    if puns != None:
-        for pun in puns:
-            pun.score = pun.rating.likes - pun.rating.dislikes
-            x = pun.rating.get_rating_for_user(request.user)
-            if x == 1:
-                pun.upvoted = True
-            elif x == -1:
-                pun.downvoted = True
-    return puns
+    if request.user.is_authenticated():
+        if puns != None:
+            for pun in puns:
+                pun.score = pun.rating.likes - pun.rating.dislikes
+                x = pun.rating.get_rating_for_user(request.user)
+                if x == 1:
+                    pun.upvoted = True
+                elif x == -1:
+                    pun.downvoted = True
+        return puns
 
 
 def orderQuerySetByPunScore(puns):
