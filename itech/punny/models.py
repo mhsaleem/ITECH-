@@ -4,18 +4,29 @@ from django.contrib.auth.models import UserManager
 from django.template.defaultfilters import slugify
 from updown.fields import RatingField
 
+from django.db.models.signals import post_save
+
 
 class UserProfile(models.Model):
     # This line is required. Links UserProfile to a User model instance.
     user = models.OneToOneField(User, unique=True)
     # The additional attributes we wish to include.
-    picture = models.ImageField(upload_to='profile_images', blank=True)
+    picture = models.ImageField(upload_to='profile_images', default='/static/images/default-profile.png')
+
     # currentBadge = models.OneToOneField(Badge)
-    #objects = UserManager()
+    # objects = UserManager()
 
     # Override the __unicode__() method to return out something meaningful!
     def __unicode__(self):
         return self.user.username
+
+
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        profile, created = UserProfile.objects.get_or_create(user=instance)
+
+
+post_save.connect(create_profile, sender=User)
 
 
 class Title(models.Model):
@@ -34,9 +45,11 @@ class Badge(models.Model):
     def __unicode__(self):
         return self.title
 
+
 class Tag(models.Model):
     text = models.CharField(max_length=28, unique=True)
     s = models.SlugField()
+
     def save(self, *args, **kwargs):
         self.s = slugify(self.text)
         super(Tag, self).save(*args, **kwargs)

@@ -109,6 +109,8 @@ def search(request):
         puns = setUpDownVotes(request, puns)
     if puns.exists():
         puns = orderQuerySetByPunScore(puns)
+        for pun in puns:
+            pun.picture = UserProfile.objects.get(user=pun.owner).picture
     context_dict['query_string'] = query_string
     context_dict['puns'] = puns
 
@@ -135,6 +137,8 @@ def tag_detail(request, tag_name_slug):
             puns = setUpDownVotes(request, puns)
         if puns.exists():
             puns = orderQuerySetByPunScore(puns)
+            for pun in puns:
+                pun.picture = UserProfile.objects.get(user=pun.owner).picture
         context_dict['tag'] = tag
         context_dict['puns'] = puns
 
@@ -151,7 +155,8 @@ def user_profile(request, username):
     context_dict = {'new_pun_form': form, 'search_form': SearchForm()}
     try:
         u = User.objects.get(username=username)
-        up = UserProfile.objects.filter(user__username__exact=username)
+        up = UserProfile.objects.get(user__exact=u)
+        x = up.picture
         title = Title.objects.filter(user__user=u)
         puns = Pun.objects.filter(Q(owner=u))
         totalScore = 0
@@ -162,6 +167,8 @@ def user_profile(request, username):
             puns = setUpDownVotes(request, puns)
         if puns.exists():
             puns = orderQuerySetByPunScore(puns)
+            for pun in puns:
+                pun.picture = UserProfile.objects.get(user=pun.owner).picture
         context_dict['user'] = u
         context_dict['userprofile'] = up
         context_dict['t'] = title
