@@ -85,6 +85,7 @@
                 <li><a href="{% url 'index' %}"><span class="glyphicon glyphicon-home"></span> Home</a></li>
                 {% if user.is_authenticated %}
                     <li><a href="#" id="newPunButton"><span class="glyphicon glyphicon-pencil"></span> New Pun</a></li>
+                    <li><a href="/punny/profile/{{ user.username }}"><span class="glyphicon glyphicon-user"></span> Profile</a></li>
                     <li><a href="{% url 'settings' %}"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
                     <li><a href="{% url 'auth_logout' %}?next=/punny/"><span class="glyphicon glyphicon-remove"></span> Logout</a></li>
                     </li>

@@ -33,7 +33,8 @@ def process_pun_form(request):
                   owner=request.user,
                   NSFW=form.cleaned_data['NSFW'],
                   flagCount=0)
-        pun.save()
+        with watson.update_index():
+            pun.save()
         for tag in tagObjs:
             pun.tags.add(tag)
             # adding tag objects to the pun
@@ -146,14 +147,17 @@ def user_profile(request, username):
         up = UserProfile.objects.filter(user__username__exact=username)
         title = Title.objects.filter(user__user=u)
         puns = Pun.objects.filter(Q(owner=u))
+        totalScore = 0
         for pun in puns:
             pun.score = pun.rating.likes - pun.rating.dislikes
+            totalScore += pun.score
         puns = setUpDownVotes(request, puns)
         puns = orderQuerySetByPunScore(puns)
         context_dict['user'] = u
         context_dict['userprofile'] = up
         context_dict['t'] = title
         context_dict['puns'] = puns
+        context_dict['user_score'] = totalScore
 
     except UserProfile.DoesNotExist:
         pass
