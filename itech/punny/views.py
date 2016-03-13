@@ -42,32 +42,35 @@ def process_pun_form(request):
 
 
 def setUpDownVotes(request, puns):
-    if request.user.is_authenticated():
-        if puns != None:
-            for pun in puns:
-                pun.score = pun.rating.likes - pun.rating.dislikes
-                x = pun.rating.get_rating_for_user(request.user)
-                if x == 1:
-                    pun.upvoted = True
-                elif x == -1:
-                    pun.downvoted = True
-        return puns
+    if puns != None:
+        for pun in puns:
+            pun.score = pun.rating.likes - pun.rating.dislikes
+            x = pun.rating.get_rating_for_user(request.user)
+            if x == 1:
+                pun.upvoted = True
+            elif x == -1:
+                pun.downvoted = True
+    return puns
 
 
 def orderQuerySetByPunScore(puns):
-    for pun in puns:
-        pun.score = pun.rating_likes - pun.rating_dislikes
-    puns = sorted(puns, key=operator.attrgetter('score'), reverse=True)
-    return puns
+    if puns.exists():
+        for pun in puns:
+            pun.score = pun.rating_likes - pun.rating_dislikes
+        puns = sorted(puns, key=operator.attrgetter('score'), reverse=True)
+        return puns
 
 
 def getTopPunInPastDays(days=1):
     now = datetime.datetime.now()
     startDay = now - timedelta(days=days)
     puns = Pun.objects.filter(timeStamp__range=(startDay, now))
-    puns = orderQuerySetByPunScore(puns)
-    topPun = puns[0]
-    return topPun
+    if puns.exists():
+        puns = orderQuerySetByPunScore(puns)
+        topPun = puns[0]
+        return topPun
+    else:
+        return None
 
 
 def index(request):
@@ -102,9 +105,10 @@ def search(request):
         data = search_form.cleaned_data
         query_string = data['search']
         puns = watson.filter(Pun, query_string)
-
-    puns = setUpDownVotes(request, puns)
-    puns = orderQuerySetByPunScore(puns)
+    if request.user.is_authenticated():
+        puns = setUpDownVotes(request, puns)
+    if puns.exists():
+        puns = orderQuerySetByPunScore(puns)
     context_dict['query_string'] = query_string
     context_dict['puns'] = puns
 
@@ -127,8 +131,10 @@ def tag_detail(request, tag_name_slug):
         puns = Pun.objects.filter(Q(tags__text__exact=tag.text))
         for pun in puns:
             pun.score = pun.rating_likes - pun.rating_dislikes
-        puns = setUpDownVotes(request, puns)
-        puns = orderQuerySetByPunScore(puns)
+        if request.user.is_authenticated():
+            puns = setUpDownVotes(request, puns)
+        if puns.exists():
+            puns = orderQuerySetByPunScore(puns)
         context_dict['tag'] = tag
         context_dict['puns'] = puns
 
@@ -152,8 +158,10 @@ def user_profile(request, username):
         for pun in puns:
             pun.score = pun.rating.likes - pun.rating.dislikes
             totalScore += pun.score
-        puns = setUpDownVotes(request, puns)
-        puns = orderQuerySetByPunScore(puns)
+        if request.user.is_authenticated():
+            puns = setUpDownVotes(request, puns)
+        if puns.exists():
+            puns = orderQuerySetByPunScore(puns)
         context_dict['user'] = u
         context_dict['userprofile'] = up
         context_dict['t'] = title
