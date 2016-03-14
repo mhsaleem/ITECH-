@@ -1,5 +1,5 @@
 from django.contrib import admin
-from punny.models import UserProfile, Title, Badge, Pun, Tag
+from models import UserProfile, Title, Badge, Pun, Tag
 
 # Register your models here.
 

@@ -1,18 +1,14 @@
-import slug as slug
 from django.template.defaultfilters import slugify
 from watson import search as watson
-from django.shortcuts import render
-from django.http import HttpResponse
 from django.shortcuts import render, render_to_response
-from punny.models import Pun, Tag, UserProfile, Badge, Title
-import punny_search
+from models import Pun, Tag, UserProfile, Badge, Title
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import logout
-from django.db.models import Q, Max
+from django.db.models import Q
 from django.contrib.auth.models import User
 from forms import PunForm, SearchForm
-from datetime import datetime, timedelta
+from datetime import timedelta
+
 import re
 import datetime
 import operator

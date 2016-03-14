@@ -1,8 +1,7 @@
 from django.conf.urls import patterns, url, include
 from django.views.generic.base import RedirectView
-from punny import views
+import views
 from updown.views import AddRatingFromModel
-from watson import search as watson
 
 urlpatterns = patterns('',
                        url(r'^$', views.index, name='index'),
