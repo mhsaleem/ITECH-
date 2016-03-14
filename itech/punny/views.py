@@ -36,6 +36,13 @@ def process_pun_form(request):
             # adding tag objects to the pun
     return form
 
+def getAllTagsList():
+    allTags = Tag.objects.filter()
+    texts = []
+    for t in allTags:
+        texts.append(t.text)
+    return texts
+
 
 def setUpDownVotes(request, puns):
     if puns != None:
@@ -107,6 +114,7 @@ def search(request):
         puns = orderQuerySetByPunScore(puns)
         for pun in puns:
             pun.picture = UserProfile.objects.get(user=pun.owner).picture
+    context_dict['tags_list'] = getAllTagsList()
     context_dict['query_string'] = query_string
     context_dict['puns'] = puns
 

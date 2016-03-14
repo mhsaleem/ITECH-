@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    var url = window.location.href;
     // Login button click handler
     $('#newPunButton').on('click', function () {
         bootbox
@@ -9,8 +10,8 @@ $(document).ready(function () {
             })
             .on('shown.bs.modal', function () {
                 $('#newPunForm')
-                    .show()       ;                      // Show the login form
-                    //.formValidation('resetForm', true); // Reset form
+                    .show();                      // Show the login form
+                //.formValidation('resetForm', true); // Reset form
             })
             .on('hide.bs.modal', function (e) {
                 // Bootbox will remove the modal (including the body which contains the login form)
@@ -20,6 +21,38 @@ $(document).ready(function () {
             })
             .modal('show');
     });
+
+    $(document).on('click', '.upbutton', function () {
+        var x = $(this).attr('upvoteurl')
+
+        $.get(x, function () {
+            $.ajax({
+                url: url,
+                success: function (data) {
+                    // grab the inner html of the returned div
+                    // so you don't nest a new div#refresh-this-div on every call
+                    var html = $(data).filter('#timeline').html();
+                    $('#timeline').html(html);
+                }
+            });
+        })
+    })
+
+    $(document).on('click', '.downbutton', function () {
+        var x = $(this).attr('downvoteurl')
+
+        $.get(x, function () {
+            $.ajax({
+                url: url,
+                success: function (data) {
+                    // grab the inner html of the returned div
+                    // so you don't nest a new div#refresh-this-div on every call
+                    var html = $(data).filter('#timeline').html();
+                    $('#timeline').html(html);
+                }
+            });
+        })
+    })
 
     //$('#tokenfield').tokenfield({
     //    //autocomplete: {
@@ -36,3 +69,5 @@ $(document).ready(function () {
         countLabel.textContent = "Characters left: " + (maxCharacters - this.value.length);
     };
 });
+
+

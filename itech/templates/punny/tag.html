@@ -9,7 +9,7 @@
 
         <h2>Puns under #{{ tag.text }}</h2>
 
-        <ul class="timeline">
+        <ul class="timeline" id="timeline">
 
         {% for pun in puns %}
             {#                         <li class="list-group-item"><a href="{% url 'category'  category.slug %}">{{ category.name }}</a></li>#}
@@ -21,17 +21,17 @@
         <div class="timeline-panel">
                 <div class="box">
                     {% if pun.upvoted == True %}
-                        <div style="color: lightgreen!important;">&#9650;</div>
+                        <div class="upbutton" upvoteurl="/punny/{{ pun.id }}/rate/1" style="color: lightgreen!important;">&#9650;</div>
                         <div class="voteLabel" id="score">{{ pun.score }}</div>
-                        <a href="/punny/{{ pun.id }}/rate/-1" class="down">&#9660;</a>
+                        <div class="downbutton" downvoteurl="/punny/{{ pun.id }}/rate/-1" class="down">&#9660;</div>
                     {% elif pun.downvoted == True %}
-                        <a href="/punny/{{ pun.id }}/rate/1" class="up">&#9650;</a>
+                        <div class="upbutton" upvoteurl="/punny/{{ pun.id }}/rate/1" href="/punny/{{ pun.id }}/rate/1" class="up">&#9650;</div>
                         <div class="voteLabel" id="score">{{ pun.score }}</div>
-                        <div style="color: lightcoral!important;">&#9660;</div>
+                        <div class="downbutton" downvoteurl="/punny/{{ pun.id }}/rate/-1" style="color: lightcoral!important;">&#9660;</div>
                     {% else %}
-                        <a href="/punny/{{ pun.id }}/rate/1" class="up">&#9650;</a>
+                        <div class="upbutton" upvoteurl="/punny/{{ pun.id }}/rate/1" href="/punny/{{ pun.id }}/rate/1" class="up">&#9650;</div>
                         <div class="voteLabel" id="score">{{ pun.rating.likes }}</div>
-                        <a href="/punny/{{ pun.id }}/rate/-1" class="down">&#9660;</a>
+                        <div class="downbutton" downvoteurl="/punny/{{ pun.id }}/rate/-1" class="down">&#9660;</div>
                     {% endif %}
 
 

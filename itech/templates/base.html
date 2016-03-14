@@ -90,7 +90,7 @@
                     <li><a href="{% url 'auth_logout' %}?next=/punny/"><span class="glyphicon glyphicon-remove"></span> Logout</a></li>
                     </li>
                 {% else %}
-                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> Login</a></li>
+                    <li><a href="{% url 'auth_login' %}"><span class="glyphicon glyphicon-user"></span> Login</a></li>
                 {% endif %}
             </ul>
         </div>
@@ -108,13 +108,7 @@
 
                 {{ new_pun_form.tags }}
                 <script>
-                    $('#tokenfield').tokenfield({
-                        autocomplete: {
-                            source: [],
-                            delay: 100
-                        },
-                        showAutocompleteOnFocus: true
-                    })
+                    $('#tokenfield').tokenfield();
                 </script>
 
                 <label style="padding-top: 10px;">
