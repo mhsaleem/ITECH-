@@ -2,6 +2,12 @@ from django.conf.urls import patterns, url, include
 from django.views.generic.base import RedirectView
 import views
 from updown.views import AddRatingFromModel
+from registration.backends.simple.views import RegistrationView
+
+
+class MyRegistrationView(RegistrationView):
+    def get_success_url(self, user):
+        return '/punny/settings/'
 
 urlpatterns = patterns('',
                        url(r'^$', views.index, name='index'),
@@ -15,4 +21,6 @@ urlpatterns = patterns('',
                        }, name="pun_rating"),
                        url(r'^search/$', views.search, name="search"),
                        url(r"^search-results/", include("watson.urls", namespace="watson")),
-                       url(r'^accounts/', include('registration.backends.simple.urls'),))  # search should be updated to include the actual search value
+                       url(r'^accounts/register/$', MyRegistrationView.as_view(), name='registration_register'),
+                       url(r'^accounts/', include('registration.backends.simple.urls')),
+)  # search should be updated to include the actual search value
