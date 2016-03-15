@@ -47,7 +47,7 @@ def get_all_tags_list():
 
 
 def set_up_down_votes(request, puns):
-    if puns != None:
+    if puns.exists():
         for pun in puns:
             pun.score = pun.rating.likes - pun.rating.dislikes
             x = pun.rating.get_rating_for_user(request.user)
