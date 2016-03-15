@@ -22,4 +22,5 @@ urlpatterns = patterns('',
                        url(r'^search/$', views.search, name="search"),
                        url(r"^search-results/", include("watson.urls", namespace="watson")),
                        url(r'^accounts/register/$', MyRegistrationView.as_view(), name='registration_register'),
-                       url(r'^accounts/', include('registration.backends.simple.urls')),)  # search should be updated to include the actual search value
+                       url(r'^accounts/', include('registration.backends.simple.urls')),
+)  # search should be updated to include the actual search value
