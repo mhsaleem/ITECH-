@@ -1,7 +1,5 @@
 import os
 
-import datetime
-
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'itech.settings')
 
 import django
@@ -31,21 +29,21 @@ def populate():
         user=user_profile
     )
 
-    pun = add_pun(
+    add_pun(
         text="This is a pun",
         owner=user_r,
         tags=[tag0],
         score=5,
     )
 
-    pun = add_pun(
+    add_pun(
         text="Whiteboards are remarkable!",
         owner=user_r,
         tags=[tag0],
         score=5,
     )
 
-    pun = add_pun(
+    add_pun(
         text="Leif me alone....",
         owner=user_r,
         tags=[tag0],
@@ -70,16 +68,15 @@ def populate():
         user=user_profile
     )
 
-    pun = add_pun(
+    add_pun(
         text="This is another pun",
         owner=user_h,
         tags=[tag0, tag2],
         score=5,
     )
 
-    oldPun = add_pun("Punday high score", user_h, [tag0], 20)
-    oldPun = add_pun("Pun to be downvoted", user_h, [tag0, tag1, tag2], 20)
-
+    add_pun("Punday high score", user_h, [tag0], 20)
+    add_pun("Pun to be downvoted", user_h, [tag0, tag1, tag2], 20)
 
     for b in Badge.objects.filter(user=user_r):
         print "- {0} - {1}".format(str(user_r), str(b))
@@ -87,10 +84,8 @@ def populate():
         print "- {0} - {1}".format(str(user_r), str(t))
     for p in Pun.objects.filter(owner=user_r):
         print "- {0} - {1}".format(str(user_r), str(p))
-        for tag0 in Tag.objects.filter(pun__tags__pun=p):
-            print "- {0}".format('#'+str(tag0.text)+", ")
-        # for t in Tag.objects.filter(pun=p):
-        #     print "-- {0} - {1}".format(str(p), str(t))
+        for t in Tag.objects.filter(pun__tags__pun=p):
+            print "- {0}".format('#'+str(t.text)+", ")
 
 
 def add_user(name, password):

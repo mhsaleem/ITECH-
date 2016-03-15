@@ -12,21 +12,10 @@
     <link rel="stylesheet" type="text/css" href="{% static 'fontello-7275ca86/css/fontello.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'icomoon/style.css' %}"/>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-    <script src="//oss.maxcdn.com/bootbox/4.2.0/bootbox.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-
-    <script type="text/javascript" src="http://sliptree.github.io/bootstrap-tokenfield/dist/bootstrap-tokenfield.js"
-            charset="UTF-8"></script>
-    <script type="text/javascript" src="{% static 'js/javascript-template.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/jquery.fonticonpicker.min.js' %}"></script>
-
-
-    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" type="text/css" rel="stylesheet">
-    <link href="http://sliptree.github.io/bootstrap-tokenfield/dist/css/tokenfield-typeahead.css" rel="stylesheet">
-    <link href="http://sliptree.github.io/bootstrap-tokenfield/dist/css/bootstrap-tokenfield.css" rel="stylesheet">
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" type="text/css" rel="stylesheet">
+    <link href="https://sliptree.github.io/bootstrap-tokenfield/dist/css/tokenfield-typeahead.css" rel="stylesheet">
+    <link href="https://sliptree.github.io/bootstrap-tokenfield/dist/css/bootstrap-tokenfield.css" rel="stylesheet">
     <link href="{% static 'css/bootstrap-timeline.css' %}" rel="stylesheet">
     <link href="{% static 'css/bootstrap-template.css' %}" rel="stylesheet">
     <!-- fontIconPicker core CSS -->
@@ -103,7 +92,7 @@
               style="display: none; padding-left: 2%; padding-right: 2%" action="">
             {% csrf_token %}
             <div class="form-group" style="color: #999999;">
-                    {{ new_pun_form.puntext }}
+                {{ new_pun_form.puntext }}
                 <label id="count" style="padding-top: 5px;">Characters left: 350</label>
 
                 {{ new_pun_form.tags }}
@@ -129,13 +118,23 @@
 {% endblock %}
 
 
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="http://getbootstrap.com/dist/js/bootstrap.min.js"></script>
-<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-<script src="http://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://oss.maxcdn.com/bootbox/4.2.0/bootbox.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+    <script type="text/javascript" src="https://sliptree.github.io/bootstrap-tokenfield/dist/bootstrap-tokenfield.js"
+            charset="UTF-8"></script>
+    <script type="text/javascript" src="{% static 'js/javascript-template.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.fonticonpicker.min.js' %}"></script>
+    <script type="text/javascript" src="{% static "js/punny-ajax.js" %}"></script>
+
+    <script src="https://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="https://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
 </body>
 <hr>
 </html>
