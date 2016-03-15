@@ -25,11 +25,11 @@
                         <div class="voteLabel" id="score">{{ pun.score }}</div>
                         <div class="downbutton" downvoteurl="/punny/{{ pun.id }}/rate/-1" class="down">&#9660;</div>
                     {% elif pun.downvoted == True %}
-                        <div class="upbutton" upvoteurl="/punny/{{ pun.id }}/rate/1" href="/punny/{{ pun.id }}/rate/1" class="up">&#9650;</div>
+                        <div class="upbutton" upvoteurl="/punny/{{ pun.id }}/rate/1" class="up">&#9650;</div>
                         <div class="voteLabel" id="score">{{ pun.score }}</div>
                         <div class="downbutton" downvoteurl="/punny/{{ pun.id }}/rate/-1" style="color: lightcoral!important;">&#9660;</div>
                     {% else %}
-                        <div class="upbutton" upvoteurl="/punny/{{ pun.id }}/rate/1" href="/punny/{{ pun.id }}/rate/1" class="up">&#9650;</div>
+                        <div class="upbutton" upvoteurl="/punny/{{ pun.id }}/rate/1" class="up">&#9650;</div>
                         <div class="voteLabel" id="score">{{ pun.rating.likes }}</div>
                         <div class="downbutton" downvoteurl="/punny/{{ pun.id }}/rate/-1" class="down">&#9660;</div>
                     {% endif %}

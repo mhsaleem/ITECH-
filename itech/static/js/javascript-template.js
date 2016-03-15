@@ -24,8 +24,9 @@ $(document).ready(function () {
 
     $(document).on('click', '.upbutton', function () {
         var x = $(this).attr('upvoteurl')
-
+        console.log("clicked")
         $.get(x, function () {
+            console.log("clicked")
             $.ajax({
                 url: url,
                 success: function (data) {
@@ -36,23 +37,25 @@ $(document).ready(function () {
                 }
             });
         })
-    })
+    });
 
     $(document).on('click', '.downbutton', function () {
-        var x = $(this).attr('downvoteurl')
-
+        var x = $(this).attr('downvoteurl');
+        console.log("clicked")
         $.get(x, function () {
+            console.log("clicked")
             $.ajax({
                 url: url,
                 success: function (data) {
                     // grab the inner html of the returned div
                     // so you don't nest a new div#refresh-this-div on every call
                     var html = $(data).filter('#timeline').html();
+                    console.log(html)
                     $('#timeline').html(html);
                 }
             });
         })
-    })
+    });
 
     //$('#tokenfield').tokenfield({
     //    //autocomplete: {

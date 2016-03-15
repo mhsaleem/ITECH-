@@ -9,4 +9,5 @@ jQuery(document).ready(function($) {
      */
     $('#e1_element').fontIconPicker();
 
+
 });

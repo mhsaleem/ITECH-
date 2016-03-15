@@ -7,7 +7,8 @@ class PunForm(forms.Form):
             'class': "form-control",
             'id': 'punBody',
             'placeholder': 'Insert your pun here..',
-            'rows': '5'}
+            'rows': '5',
+            'style': 'resize: vertical;'}
     ), required=True)
     tags = forms.CharField(widget=forms.TextInput(
         attrs={
