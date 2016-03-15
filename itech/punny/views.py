@@ -70,7 +70,7 @@ def get_top_puns_in_past_days(days=1):
     now = datetime.datetime.now()
     startDay = now - timedelta(days=days)
     puns = Pun.objects.filter(timeStamp__range=(startDay, now))
-    if puns is not None:
+    if puns:
         puns = order_query_set_by_pun_score(puns)
         topPun = puns[0]
         return topPun
