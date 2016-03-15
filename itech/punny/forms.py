@@ -6,7 +6,7 @@ class PunForm(forms.Form):
         attrs={
             'class': "form-control",
             'id': 'punBody',
-            'placeholder': 'Insert your pun here..',
+            'placeholder': 'Insert your pun here...',
             'rows': '5',
             'style': 'resize: vertical;'}
     ), required=True)
@@ -14,7 +14,7 @@ class PunForm(forms.Form):
         attrs={
             'class': 'form-control',
             'id': 'tokenfield',
-            'placeholder': 'Insert tags..',
+            'placeholder': 'Insert tags...',
             'style': 'width: 100%;'
         }
     ), required=False)
