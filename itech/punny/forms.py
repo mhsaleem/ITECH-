@@ -30,3 +30,38 @@ class SearchForm(forms.Form):
             'placeholder': 'Search punny..'
         }
     ), max_length=100)
+
+class SettingsForm(forms.Form):
+    username = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'class' : 'form-control',
+        }
+    ))
+    email = forms.CharField(widget=forms.TextInput(
+        attrs={
+            'class' : 'form-control'
+        }
+    ))
+    title = forms.ChoiceField(widget=forms.Select(
+        attrs={
+            'class' : 'form-control'
+        }
+    ))
+    password1 = forms.CharField(widget=forms.PasswordInput(
+        attrs={
+            'class' : 'form-control',
+        }
+    ))
+    password2 = forms.CharField(widget=forms.PasswordInput(
+        attrs={
+            'class' : 'form-control',
+        }
+    ))
+    # def clean(self):
+    #     if 'password1' in self.cleaned_data and 'password2' in self.cleaned_data:
+    #
+
+
+
+
+

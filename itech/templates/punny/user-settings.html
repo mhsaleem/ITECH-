@@ -13,7 +13,7 @@
             <!-- left column -->
             <div class="col-md-3">
                 <div class="text-center">
-                    <img src="{% static 'images/leonardo-dicaprio.jpg' %}" class="avatar img-circle" alt="avatar"
+                    <img src="{{ user_profile.picture }}" class="avatar img-circle" alt="avatar"
                          style="width: 200px">
                     <h6>Upload a different photo...</h6>
                     <input type="file" class="form-control">
@@ -50,7 +50,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- edit form column -->
             <div class="col-md-9 personal-info">
                 <div class="alert alert-info alert-dismissable" style="display: none">
@@ -58,19 +57,21 @@
                     <i class="fa fa-coffee"></i>
                     This is an <strong>.alert</strong>. Use this to show messages to the user.
                 </div>
-                <h3>Leonardo Dicaprio</h3>
+                <h3>{{ user.username }}</h3>
 
                 <form class="form-horizontal" role="form">
+                     {% csrf_token %}
                     <div class="form-group">
                         <label class="col-lg-3 control-label">Username:</label>
                         <div class="col-lg-8">
-                            <input class="form-control" type="text" value="wonoscar">
+{#                            <input class="form-control" type="text" value="wonoscar">#}
+                            {{ settings_form.username }}
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-lg-3 control-label">Email:</label>
                         <div class="col-lg-8">
-                            <input class="form-control" type="text" value="icydepths@titanic.fuck">
+                            {{ settings_form.email }}
                         </div>
                     </div>
                     <div class="form-group">
@@ -92,13 +93,13 @@
                     <div class="form-group">
                         <label class="col-md-3 control-label">Password:</label>
                         <div class="col-md-8">
-                            <input class="form-control" type="password" value="11111122333">
+                            {{ settings_form.password1 }}
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">Confirm password:</label>
                         <div class="col-md-8">
-                            <input class="form-control" type="password" value="11111122333">
+                            {{ settings_form.password2 }}
                         </div>
                     </div>
                     <div class="form-group">
@@ -114,5 +115,4 @@
         </div>
     </div>
     <hr>
-
 {% endblock %}

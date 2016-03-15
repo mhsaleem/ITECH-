@@ -6,7 +6,7 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.contrib.auth.models import User
-from forms import PunForm, SearchForm
+from forms import PunForm, SearchForm, SettingsForm
 from datetime import timedelta
 
 import re
@@ -16,6 +16,7 @@ import operator
 
 # Reusable function to process a pun submission
 def process_pun_form(request):
+    didPost = False
     form = PunForm(request.POST)
     if form.is_valid():
         # this is working, redirect needs fixed. But currently users do not have profiles automatically
@@ -34,9 +35,10 @@ def process_pun_form(request):
         for tag in tagObjs:
             pun.tags.add(tag)
             # adding tag objects to the pun
-    return form
+        didPost = True
+    return (form, didPost)
 
-def getAllTagsList():
+def get_all_tags_list():
     allTags = Tag.objects.filter()
     texts = []
     for t in allTags:
@@ -44,7 +46,7 @@ def getAllTagsList():
     return texts
 
 
-def setUpDownVotes(request, puns):
+def set_up_down_votes(request, puns):
     if puns != None:
         for pun in puns:
             pun.score = pun.rating.likes - pun.rating.dislikes
@@ -56,20 +58,20 @@ def setUpDownVotes(request, puns):
     return puns
 
 
-def orderQuerySetByPunScore(puns):
-    if puns.exists():
+def order_query_set_by_pun_score(puns):
+    if puns is not None:
         for pun in puns:
             pun.score = pun.rating_likes - pun.rating_dislikes
         puns = sorted(puns, key=operator.attrgetter('score'), reverse=True)
         return puns
 
 
-def getTopPunInPastDays(days=1):
+def get_top_puns_in_past_days(days=1):
     now = datetime.datetime.now()
     startDay = now - timedelta(days=days)
     puns = Pun.objects.filter(timeStamp__range=(startDay, now))
-    if puns.exists():
-        puns = orderQuerySetByPunScore(puns)
+    if puns is not None:
+        puns = order_query_set_by_pun_score(puns)
         topPun = puns[0]
         return topPun
     else:
@@ -77,9 +79,10 @@ def getTopPunInPastDays(days=1):
 
 
 def index(request):
+    did_post_pun = False
     user = request.user
     if request.method == 'POST':
-        form = process_pun_form(request)
+        form,did_post_pun = process_pun_form(request)
     else:
         form = PunForm()
 
@@ -88,15 +91,16 @@ def index(request):
     context_dict['search_form'] = SearchForm()
     now = datetime.datetime.now()
 
-    context_dict['today'] = getTopPunInPastDays(1)
-    context_dict['week'] = getTopPunInPastDays(7)
-    context_dict['month'] = getTopPunInPastDays(30)
+    context_dict['today'] = get_top_puns_in_past_days(1)
+    context_dict['week'] = get_top_puns_in_past_days(7)
+    context_dict['month'] = get_top_puns_in_past_days(30)
     return render(request, 'punny/index.html', context_dict)
 
 
 def search(request):
+    did_post_pun = False
     if request.method == 'POST':
-        form = process_pun_form(request)
+        form,did_post_pun = process_pun_form(request)
     else:
         form = PunForm()
     context_dict = {'new_pun_form': form, 'search_form': SearchForm()}
@@ -109,25 +113,28 @@ def search(request):
         query_string = data['search']
         puns = watson.filter(Pun, query_string)
     if request.user.is_authenticated():
-        puns = setUpDownVotes(request, puns)
-    if puns.exists():
-        puns = orderQuerySetByPunScore(puns)
+        puns = set_up_down_votes(request, puns)
+    if puns is not None:
+        puns = order_query_set_by_pun_score(puns)
         for pun in puns:
             pun.picture = UserProfile.objects.get(user=pun.owner).picture
-    context_dict['tags_list'] = getAllTagsList()
+    context_dict['tags_list'] = get_all_tags_list()
     context_dict['query_string'] = query_string
     context_dict['puns'] = puns
-
-    return render_to_response('punny/search-results.html',
+    response = render_to_response('punny/search-results.html',
                               context_dict,
                               context_instance=RequestContext(request))
+    if did_post_pun:
+        response.set_cookie('message', 'pun posted!', max_age=5)
 
-    # return render(request, 'punny/search-results.html', context_dict)
+    return response
+
 
 
 def tag_detail(request, tag_name_slug):
+    did_post_pun = False
     if request.method == 'POST':
-        form = process_pun_form(request)
+        form,did_post_pun = process_pun_form(request)
     else:
         form = PunForm()
     context_dict = {'new_pun_form': form, 'search_form': SearchForm()}
@@ -138,9 +145,9 @@ def tag_detail(request, tag_name_slug):
         for pun in puns:
             pun.score = pun.rating_likes - pun.rating_dislikes
         if request.user.is_authenticated():
-            puns = setUpDownVotes(request, puns)
+            puns = set_up_down_votes(request, puns)
         if puns.exists():
-            puns = orderQuerySetByPunScore(puns)
+            puns = order_query_set_by_pun_score(puns)
             for pun in puns:
                 pun.picture = UserProfile.objects.get(user=pun.owner).picture
         context_dict['tag'] = tag
@@ -148,12 +155,17 @@ def tag_detail(request, tag_name_slug):
 
     except Tag.DoesNotExist:
         pass
-    return render(request, 'punny/tag.html', context_dict)
+    response =  render(request, 'punny/tag.html', context_dict)
+    if did_post_pun:
+        response.set_cookie('message', 'pun posted!', max_age=5)
+
+    return response
 
 
 def user_profile(request, username):
+    did_post_pun = False
     if request.method == 'POST':
-        form = process_pun_form(request)
+        form,did_post_pun = process_pun_form(request)
     else:
         form = PunForm()
     context_dict = {'new_pun_form': form, 'search_form': SearchForm()}
@@ -168,9 +180,9 @@ def user_profile(request, username):
             pun.score = pun.rating.likes - pun.rating.dislikes
             totalScore += pun.score
         if request.user.is_authenticated():
-            puns = setUpDownVotes(request, puns)
+            puns = set_up_down_votes(request, puns)
         if puns.exists():
-            puns = orderQuerySetByPunScore(puns)
+            puns = order_query_set_by_pun_score(puns)
             for pun in puns:
                 pun.picture = UserProfile.objects.get(user=pun.owner).picture
         context_dict['user'] = u
@@ -181,14 +193,33 @@ def user_profile(request, username):
 
     except UserProfile.DoesNotExist:
         pass
-    return render(request, 'punny/profile.html', context_dict)
+    response =  render(request, 'punny/profile.html', context_dict)
+    if did_post_pun:
+        response.set_cookie('message', 'pun posted!', max_age=5)
+
+    return response
 
 
 @login_required
 def settings(request):
+    did_post_pun = False
     if request.method == 'POST':
-        form = process_pun_form(request)
+        form,did_post_pun = process_pun_form(request)
     else:
         form = PunForm()
     context_dict = {'new_pun_form': form, 'search_form': SearchForm()}
-    return render(request, 'punny/user-settings.html', context_dict)
+    user = request.user
+    profile = UserProfile.objects.get(user=user)
+    #title = Title.objects.get(user=user)
+    settingsForm = SettingsForm({'username' : user.username,
+                                 'email' : user.email})
+    settingsForm.fields['username'].widget.attrs['readonly'] = True
+    context_dict['settings_form'] = settingsForm
+    context_dict['user'] = user
+    context_dict['user_profile'] = profile
+
+    response =  render(request, 'punny/user-settings.html', context_dict)
+    if did_post_pun:
+        response.set_cookie('message', 'pun posted!', max_age=5)
+
+    return response

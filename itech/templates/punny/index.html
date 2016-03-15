@@ -46,11 +46,12 @@
                         <ul class="nav masthead-nav">
                             <li class="active"><a href="#">Home</a></li>
                             {% if user.is_authenticated %}
-                                <li><a href="#" id="newPunButton"><span class="glyphicon glyphicon-pencil"></span></a>
+                                <li><a href="#" id="newPunButton"><span class="glyphicon glyphicon-pencil"></span>  Write Pun</a>
                                 </li>
                                 <li><a href="profile/{{ user.username }}"><span><img
                                         src="{{ user.userprofile.picture }}"
                                         class="img-circle" width="40px"></span> {{ user.username }}</a>
+                                <li><a href="{% url 'auth_logout' %}?next=/punny/" id="logout"><span class="glyphicon glyphicon-off"></span> Logout</a>
                                     {% else %}
                                 <li><a href="{% url 'auth_login' %}">Login</a></li>
                             {% endif %}

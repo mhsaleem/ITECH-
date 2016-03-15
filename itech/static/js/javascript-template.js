@@ -56,14 +56,15 @@ $(document).ready(function () {
             });
         })
     });
+    var notification = $('#pun_posted_confirm')
+    msg = $.cookie('message')
+    if (msg) {
+        notification.show()
+        setTimeout(function () {
+            notification.fadeOut().empty();
+        }, 2000);
+    };
 
-    //$('#tokenfield').tokenfield({
-    //    //autocomplete: {
-    //    //    source: ['red', 'blue', 'green', 'yellow', 'violet', 'brown', 'purple', 'black', 'white'],
-    //    //    delay: 100
-    //    //},
-    //    showAutocompleteOnFocus: true
-    //});
     var maxCharacters = 350;
     var punBody = document.getElementById('punBody');
     var countLabel = document.getElementById('count');

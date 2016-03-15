@@ -29,6 +29,7 @@
     <script type="text/javascript" src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script type="text/javascript" src="https://sliptree.github.io/bootstrap-tokenfield/dist/bootstrap-tokenfield.js"
             charset="UTF-8"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.cookie.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/javascript-template.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/jquery.fonticonpicker.min.js' %}"></script>
 
@@ -114,6 +115,11 @@
 
     </div>
 </div>
+
+<div class="alert alert-success" id="pun_posted_confirm" hidden="true">
+  <strong>Success!</strong> You posted a new pun!
+</div>
+
 {% block body_block %}
 {% endblock %}
 
