@@ -3,6 +3,7 @@ import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'itech.settings')
 
 import django
+
 django.setup()
 
 from punny.models import UserProfile, Title, Badge, Pun, Tag
@@ -10,7 +11,6 @@ from django.contrib.auth.models import User
 
 
 def populate():
-
     user_r = add_user(name='rory', password='rory')
 
     user_profile = add_user_profile(user_r)
@@ -85,7 +85,7 @@ def populate():
     for p in Pun.objects.filter(owner=user_r):
         print "- {0} - {1}".format(str(user_r), str(p))
         for t in Tag.objects.filter(pun__tags__pun=p):
-            print "- {0}".format('#'+str(t.text)+", ")
+            print "- {0}".format('#' + str(t.text) + ", ")
 
 
 def add_user(name, password):

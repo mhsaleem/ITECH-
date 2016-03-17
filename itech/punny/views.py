@@ -38,6 +38,7 @@ def process_pun_form(request):
         didPost = True
     return (form, didPost)
 
+
 def get_all_tags_list():
     allTags = Tag.objects.filter()
     texts = []
@@ -82,7 +83,7 @@ def index(request):
     did_post_pun = False
     user = request.user
     if request.method == 'POST':
-        form,did_post_pun = process_pun_form(request)
+        form, did_post_pun = process_pun_form(request)
     else:
         form = PunForm()
 
@@ -100,7 +101,7 @@ def index(request):
 def search(request):
     did_post_pun = False
     if request.method == 'POST':
-        form,did_post_pun = process_pun_form(request)
+        form, did_post_pun = process_pun_form(request)
     else:
         form = PunForm()
     context_dict = {'new_pun_form': form, 'search_form': SearchForm()}
@@ -122,19 +123,18 @@ def search(request):
     context_dict['query_string'] = query_string
     context_dict['puns'] = puns
     response = render_to_response('punny/search-results.html',
-                              context_dict,
-                              context_instance=RequestContext(request))
+                                  context_dict,
+                                  context_instance=RequestContext(request))
     if did_post_pun:
-        response.set_cookie('message', 'pun posted!', max_age=5)
+        response.set_cookie('message', 'pun posted!', max_age=3)
 
     return response
-
 
 
 def tag_detail(request, tag_name_slug):
     did_post_pun = False
     if request.method == 'POST':
-        form,did_post_pun = process_pun_form(request)
+        form, did_post_pun = process_pun_form(request)
     else:
         form = PunForm()
     context_dict = {'new_pun_form': form, 'search_form': SearchForm()}
@@ -155,9 +155,9 @@ def tag_detail(request, tag_name_slug):
 
     except Tag.DoesNotExist:
         pass
-    response =  render(request, 'punny/tag.html', context_dict)
+    response = render(request, 'punny/tag.html', context_dict)
     if did_post_pun:
-        response.set_cookie('message', 'pun posted!', max_age=5)
+        response.set_cookie('message', 'pun posted!', max_age=3)
 
     return response
 
@@ -165,7 +165,7 @@ def tag_detail(request, tag_name_slug):
 def user_profile(request, username):
     did_post_pun = False
     if request.method == 'POST':
-        form,did_post_pun = process_pun_form(request)
+        form, did_post_pun = process_pun_form(request)
     else:
         form = PunForm()
     context_dict = {'new_pun_form': form, 'search_form': SearchForm()}
@@ -193,9 +193,9 @@ def user_profile(request, username):
 
     except UserProfile.DoesNotExist:
         pass
-    response =  render(request, 'punny/profile.html', context_dict)
+    response = render(request, 'punny/profile.html', context_dict)
     if did_post_pun:
-        response.set_cookie('message', 'pun posted!', max_age=5)
+        response.set_cookie('message', 'pun posted!', max_age=3)
 
     return response
 
@@ -203,23 +203,33 @@ def user_profile(request, username):
 @login_required
 def settings(request):
     did_post_pun = False
+    new_pun_form = PunForm()
     if request.method == 'POST':
-        form,did_post_pun = process_pun_form(request)
-    else:
-        form = PunForm()
-    context_dict = {'new_pun_form': form, 'search_form': SearchForm()}
+        if request.POST.get("puntext"):  # if this a post with a new pun
+            new_pun_form, did_post_pun = process_pun_form(request)
+        else:
+            form = SettingsForm(request.POST)
+            if form.is_valid():
+                email = form.cleaned_data['email']
+                title = form.cleaned_data['title']
+                password = form.cleaned_data['password']
+
+    context_dict = {'new_pun_form': new_pun_form, 'search_form': SearchForm()}
     user = request.user
     profile = UserProfile.objects.get(user=user)
-    #title = Title.objects.get(user=user)
-    settingsForm = SettingsForm({'username' : user.username,
-                                 'email' : user.email})
+
+    settingsForm = SettingsForm(initial={'username': user.username,
+                                 'email': user.email,
+                                 'title' : profile.selected_title}, user=user)
     settingsForm.fields['username'].widget.attrs['readonly'] = True
     context_dict['settings_form'] = settingsForm
     context_dict['user'] = user
     context_dict['user_profile'] = profile
 
-    response =  render(request, 'punny/user-settings.html', context_dict)
+    response = render(request, 'punny/user-settings.html', context_dict)
     if did_post_pun:
-        response.set_cookie('message', 'pun posted!', max_age=5)
+        response.set_cookie('message', 'pun posted!', max_age=2)
+    if (user.last_login - user.date_joined).seconds < 60: #user registered less than sixty seconds ago. Display message for help
+        response.set_cookie('virgin', 'this is a first time user', max_age=4)
 
     return response

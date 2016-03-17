@@ -12,7 +12,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, unique=True)
     # The additional attributes we wish to include.
     picture = models.ImageField(upload_to='profile_images', default='/static/images/default-profile.png')
-
+    selected_title = models.ForeignKey('Title')
     # currentBadge = models.OneToOneField(Badge)
     # objects = UserManager()
 
@@ -23,7 +23,11 @@ class UserProfile(models.Model):
 
 def create_profile(sender, instance, created, **kwargs):
     if created:
-        profile, created = UserProfile.objects.get_or_create(user=instance)
+        title = Title.objects.get_or_create(title="Newb")[0]
+        profile, created = UserProfile.objects.get_or_create(user=instance, selected_title=title)
+        title.user.add(profile)
+        title.save()
+        profile.save()
 
 
 post_save.connect(create_profile, sender=User)

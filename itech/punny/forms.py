@@ -1,4 +1,5 @@
 from django import forms
+from models import Title
 
 
 class PunForm(forms.Form):
@@ -31,37 +32,37 @@ class SearchForm(forms.Form):
         }
     ), max_length=100)
 
+
 class SettingsForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(
         attrs={
-            'class' : 'form-control',
+            'class': 'form-control',
         }
     ))
     email = forms.CharField(widget=forms.TextInput(
         attrs={
-            'class' : 'form-control'
+            'class': 'form-control'
         }
     ))
-    title = forms.ChoiceField(widget=forms.Select(
+    title = forms.ModelChoiceField(widget=forms.Select(
         attrs={
-            'class' : 'form-control'
-        }
-    ))
+            'class': 'form-control'
+        }), queryset=Title.objects.all())
+
     password1 = forms.CharField(widget=forms.PasswordInput(
         attrs={
-            'class' : 'form-control',
+            'class': 'form-control',
         }
     ))
     password2 = forms.CharField(widget=forms.PasswordInput(
         attrs={
-            'class' : 'form-control',
+            'class': 'form-control',
         }
     ))
-    # def clean(self):
-    #     if 'password1' in self.cleaned_data and 'password2' in self.cleaned_data:
-    #
 
-
-
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super(SettingsForm, self).__init__(*args, **kwargs)
+        self.fields['title'].queryset = Title.objects.filter(user=self.user)
 
 

@@ -92,7 +92,7 @@
 <div class="col-sm-12 col-md-15 main" style="background-color: transparent">
     <div>
         <form id="newPunForm" method="post" class="form-horizontal"
-              style="display: none; padding-left: 2%; padding-right: 2%" action="">
+              style="display: none; padding-left: 2%; padding-right: 2%" action="" name="punform">
             {% csrf_token %}
             <div class="form-group" style="color: #999999;">
                 {{ new_pun_form.puntext }}

@@ -18,48 +18,48 @@
                     <h6>Upload a different photo...</h6>
                     <input type="file" class="form-control">
                     {# Choose your badge!!! TODO: Populate this based on users django stuff#}
-                    <div class="form-group" style="padding-top: 40px">
-                        <label class="col-md-3 control-label">Your badge:</label>
-                        <div class="col-md-8">
-                            <select id="e1_element" name="e1_element">
-                                <option value="">No icon</option>
-                                <option>icon-user</option>
-                                <option>icon-search</option>
-                                <option>icon-right-dir</option>
-                                <option>icon-star</option>
-                                <option>icon-cancel</option>
-                                <option>icon-help-circled</option>
-                                <option>icon-info-circled</option>
-                                <option>icon-eye</option>
-                                <option>icon-tag</option>
-                                <option>icon-bookmark</option>
-                                <option>icon-heart</option>
-                                <option>icon-thumbs-down-alt</option>
-                                <option>icon-upload-cloud</option>
-                                <option>icon-phone-squared</option>
-                                <option>icon-cog</option>
-                                <option>icon-wrench</option>
-                                <option>icon-volume-down</option>
-                                <option>icon-down-dir</option>
-                                <option>icon-up-dir</option>
-                                <option>icon-left-dir</option>
-                                <option>icon-thumbs-up-alt</option>
-                            </select>
-                            <p style="padding-top: 5px">Earn new badges by posting puns! </p>
-                        </div>
-                    </div>
+{#                    <div class="form-group" style="padding-top: 40px">#}
+{#                        <label class="col-md-3 control-label">Your badge:</label>#}
+{#                        <div class="col-md-8">#}
+{#                            <select id="e1_element" name="e1_element">#}
+{#                                <option value="">No icon</option>#}
+{#                                <option>icon-user</option>#}
+{#                                <option>icon-search</option>#}
+{#                                <option>icon-right-dir</option>#}
+{#                                <option>icon-star</option>#}
+{#                                <option>icon-cancel</option>#}
+{#                                <option>icon-help-circled</option>#}
+{#                                <option>icon-info-circled</option>#}
+{#                                <option>icon-eye</option>#}
+{#                                <option>icon-tag</option>#}
+{#                                <option>icon-bookmark</option>#}
+{#                                <option>icon-heart</option>#}
+{#                                <option>icon-thumbs-down-alt</option>#}
+{#                                <option>icon-upload-cloud</option>#}
+{#                                <option>icon-phone-squared</option>#}
+{#                                <option>icon-cog</option>#}
+{#                                <option>icon-wrench</option>#}
+{#                                <option>icon-volume-down</option>#}
+{#                                <option>icon-down-dir</option>#}
+{#                                <option>icon-up-dir</option>#}
+{#                                <option>icon-left-dir</option>#}
+{#                                <option>icon-thumbs-up-alt</option>#}
+{#                            </select>#}
+{#                            <p style="padding-top: 5px">Earn new badges by posting puns! </p>#}
+{#                        </div>#}
+{#                    </div>#}
                 </div>
             </div>
             <!-- edit form column -->
             <div class="col-md-9 personal-info">
-                <div class="alert alert-info alert-dismissable" style="display: none">
+                <div id="virginbox" class="alert alert-info alert-dismissable" style="display: none">
                     <a class="panel-close close" data-dismiss="alert">×</a>
                     <i class="fa fa-coffee"></i>
                     This is an <strong>.alert</strong>. Use this to show messages to the user.
                 </div>
                 <h3>{{ user.username }}</h3>
 
-                <form class="form-horizontal" role="form">
+                <form class="form-horizontal" role="form" action="" method="post" name="usersettings">
                      {% csrf_token %}
                     <div class="form-group">
                         <label class="col-lg-3 control-label">Username:</label>
@@ -75,19 +75,9 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-lg-3 control-label">Your tag:</label>
+                        <label class="col-lg-3 control-label">Your title:</label>
                         <div class="col-lg-8">
-                            <div class="ui-select">
-                                <select id="user_time_zone" class="form-control">
-                                    <option value="punid1">Grand Punmaster</option>
-                                    <option value="punid2">Newb</option>
-                                    <option value="punid3">Noob
-                                    </option>
-                                    <option value="punid4">Punny Guy</option>
-                                    <option value="punid5">Punter</option>
-                                    <option value="punid6">Punisher</option>
-                                </select>
-                            </div>
+                            {{ settings_form.title }}
                         </div>
                     </div>
                     <div class="form-group">
@@ -105,7 +95,7 @@
                     <div class="form-group">
                         <label class="col-md-3 control-label"></label>
                         <div class="col-md-8">
-                            <input type="button" class="btn btn-primary" value="Save Changes">
+                            <input type="submit" class="btn btn-primary" value="Save Changes">
                             <span></span>
                             <input type="reset" class="btn btn-default" value="Cancel">
                         </div>
@@ -114,5 +104,4 @@
             </div>
         </div>
     </div>
-    <hr>
 {% endblock %}
