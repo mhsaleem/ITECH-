@@ -203,25 +203,28 @@ def user_profile(request, username):
 @login_required
 def settings(request):
     did_post_pun = False
+    user = request.user
+    profile = UserProfile.objects.get(user=user)
     new_pun_form = PunForm()
     if request.method == 'POST':
         if request.POST.get("puntext"):  # if this a post with a new pun
             new_pun_form, did_post_pun = process_pun_form(request)
         else:
             form = SettingsForm(request.POST)
+            tt = form['title']
             if form.is_valid():
                 email = form.cleaned_data['email']
-                title = form.cleaned_data['title']
-                password = form.cleaned_data['password']
-
+                if 'picture' in request.FILES:
+                    profile.picture = request.FILES['picture'] #check if the user actually uploaded a file
+                user.email = email
+                profile.title = Title.objects.get(title=form.cleaned_data['title'])
+                profile.save()
+                user.save()
     context_dict = {'new_pun_form': new_pun_form, 'search_form': SearchForm()}
-    user = request.user
-    profile = UserProfile.objects.get(user=user)
-
     settingsForm = SettingsForm(initial={'username': user.username,
-                                 'email': user.email,
-                                 'title' : profile.selected_title}, user=user)
-    settingsForm.fields['username'].widget.attrs['readonly'] = True
+                                         'email': user.email,
+                                         'title': profile.selected_title}, user=user)
+    settingsForm.fields['username'].widget.attrs['readonly'] = True #although an html/javascript wizard could override this, we're not atually storing any data anyhow
     context_dict['settings_form'] = settingsForm
     context_dict['user'] = user
     context_dict['user_profile'] = profile
@@ -229,7 +232,8 @@ def settings(request):
     response = render(request, 'punny/user-settings.html', context_dict)
     if did_post_pun:
         response.set_cookie('message', 'pun posted!', max_age=2)
-    if (user.last_login - user.date_joined).seconds < 60: #user registered less than sixty seconds ago. Display message for help
+    if (
+                user.last_login - user.date_joined).seconds < 60:  # user registered less than sixty seconds ago. Display message for help
         response.set_cookie('virgin', 'this is a first time user', max_age=4)
 
     return response

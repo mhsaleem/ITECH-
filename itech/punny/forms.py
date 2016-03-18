@@ -34,35 +34,16 @@ class SearchForm(forms.Form):
 
 
 class SettingsForm(forms.Form):
-    username = forms.CharField(widget=forms.TextInput(
-        attrs={
-            'class': 'form-control',
-        }
-    ))
-    email = forms.CharField(widget=forms.TextInput(
-        attrs={
-            'class': 'form-control'
-        }
-    ))
-    title = forms.ModelChoiceField(widget=forms.Select(
-        attrs={
-            'class': 'form-control'
-        }), queryset=Title.objects.all())
-
-    password1 = forms.CharField(widget=forms.PasswordInput(
-        attrs={
-            'class': 'form-control',
-        }
-    ))
-    password2 = forms.CharField(widget=forms.PasswordInput(
-        attrs={
-            'class': 'form-control',
-        }
-    ))
+    username = forms.CharField()
+    email = forms.CharField()
+    title = forms.ChoiceField(required=False, choices=[(t.title, t.title) for t in Title.objects.all()])
+    picture = forms.ImageField(required=False)
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
         super(SettingsForm, self).__init__(*args, **kwargs)
-        self.fields['title'].queryset = Title.objects.filter(user=self.user)
+        #self.fields['title'].choices = [(t.title, t.title) for t in Title.objects.filter(user=self.user)]
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
 
 

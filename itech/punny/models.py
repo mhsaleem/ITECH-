@@ -24,8 +24,10 @@ class UserProfile(models.Model):
 def create_profile(sender, instance, created, **kwargs):
     if created:
         title = Title.objects.get_or_create(title="Newb")[0]
+        punter = Title.objects.get_or_create(title="Punter")[0]
         profile, created = UserProfile.objects.get_or_create(user=instance, selected_title=title)
         title.user.add(profile)
+        punter.user.add(profile)
         title.save()
         profile.save()
 
