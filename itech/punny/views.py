@@ -185,7 +185,7 @@ def user_profile(request, username):
             puns = order_query_set_by_pun_score(puns)
             for pun in puns:
                 pun.picture = UserProfile.objects.get(user=pun.owner).picture
-        context_dict['user'] = u
+        context_dict['page_user'] = u
         context_dict['userprofile'] = up
         context_dict['t'] = title
         context_dict['puns'] = puns
@@ -196,7 +196,6 @@ def user_profile(request, username):
     response = render(request, 'punny/profile.html', context_dict)
     if did_post_pun:
         response.set_cookie('message', 'pun posted!', max_age=3)
-
     return response
 
 
