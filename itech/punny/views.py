@@ -173,7 +173,6 @@ def user_profile(request, username):
         u = User.objects.get(username=username)
         up = UserProfile.objects.get(user__exact=u)
         x = up.picture
-        title = Title.objects.filter(user__user=u)
         puns = Pun.objects.filter(Q(owner=u))
         totalScore = 0
         for pun in puns:
@@ -187,7 +186,6 @@ def user_profile(request, username):
                 pun.picture = UserProfile.objects.get(user=pun.owner).picture
         context_dict['page_user'] = u
         context_dict['userprofile'] = up
-        context_dict['t'] = title
         context_dict['puns'] = puns
         context_dict['user_score'] = totalScore
 
