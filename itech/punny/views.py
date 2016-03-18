@@ -16,15 +16,15 @@ import operator
 
 # Reusable function to process a pun submission
 def process_pun_form(request):
-    didPost = False
+    did_post = False
     form = PunForm(request.POST)
     if form.is_valid():
         # this is working, redirect needs fixed. But currently users do not have profiles automatically
         tags = re.split("; |, ", form.cleaned_data['tags'])
         # converting text to tag objects
-        tagObjs = []
+        tag_objs = []
         for tag in tags:
-            tagObjs.append(Tag.objects.get_or_create(text=tag)[0])
+            tag_objs.append(Tag.objects.get_or_create(text=tag)[0])
 
         pun = Pun(text=form.cleaned_data['puntext'],
                   owner=request.user,
@@ -32,17 +32,17 @@ def process_pun_form(request):
                   flagCount=0)
         with watson.update_index():
             pun.save()
-        for tag in tagObjs:
+        for tag in tag_objs:
             pun.tags.add(tag)
             # adding tag objects to the pun
-        didPost = True
-    return (form, didPost)
+        did_post = True
+    return (form, did_post)
 
 
 def get_all_tags_list():
-    allTags = Tag.objects.filter()
+    all_tags = Tag.objects.filter()
     texts = []
-    for t in allTags:
+    for t in all_tags:
         texts.append(t.text)
     return texts
 
@@ -69,12 +69,12 @@ def order_query_set_by_pun_score(puns):
 
 def get_top_puns_in_past_days(days=1):
     now = datetime.datetime.now()
-    startDay = now - timedelta(days=days)
-    puns = Pun.objects.filter(timeStamp__range=(startDay, now))
+    start_day = now - timedelta(days=days)
+    puns = Pun.objects.filter(timeStamp__range=(start_day, now))
     if puns:
         puns = order_query_set_by_pun_score(puns)
-        topPun = puns[0]
-        return topPun
+        top_pun = puns[0]
+        return top_pun
     else:
         return None
 
@@ -87,9 +87,7 @@ def index(request):
     else:
         form = PunForm()
 
-    context_dict = {'new_pun_form': form}
-    context_dict['user'] = user
-    context_dict['search_form'] = SearchForm()
+    context_dict = {'new_pun_form': form, 'user': user, 'search_form': SearchForm()}
     now = datetime.datetime.now()
 
     context_dict['today'] = get_top_puns_in_past_days(1)
@@ -174,10 +172,10 @@ def user_profile(request, username):
         up = UserProfile.objects.get(user__exact=u)
         x = up.picture
         puns = Pun.objects.filter(Q(owner=u))
-        totalScore = 0
+        total_score = 0
         for pun in puns:
             pun.score = pun.rating.likes - pun.rating.dislikes
-            totalScore += pun.score
+            total_score += pun.score
         if request.user.is_authenticated():
             puns = set_up_down_votes(request, puns)
         if puns.exists():
@@ -187,7 +185,7 @@ def user_profile(request, username):
         context_dict['page_user'] = u
         context_dict['userprofile'] = up
         context_dict['puns'] = puns
-        context_dict['user_score'] = totalScore
+        context_dict['user_score'] = total_score
 
     except UserProfile.DoesNotExist:
         pass
@@ -212,17 +210,18 @@ def settings(request):
             if form.is_valid():
                 email = form.cleaned_data['email']
                 if 'picture' in request.FILES:
-                    profile.picture = request.FILES['picture'] #check if the user actually uploaded a file
+                    profile.picture = request.FILES['picture']  # check if the user actually uploaded a file
                 user.email = email
                 profile.title = Title.objects.get(title=form.cleaned_data['title'])
                 profile.save()
                 user.save()
     context_dict = {'new_pun_form': new_pun_form, 'search_form': SearchForm()}
-    settingsForm = SettingsForm(initial={'username': user.username,
-                                         'email': user.email,
-                                         'title': profile.selected_title}, user=user)
-    settingsForm.fields['username'].widget.attrs['readonly'] = True #although an html/javascript wizard could override this, we're not atually storing any data anyhow
-    context_dict['settings_form'] = settingsForm
+    settings_form = SettingsForm(initial={'username': user.username,
+                                          'email': user.email,
+                                          'title': profile.selected_title}, user=user)
+    settings_form.fields['username'].widget.attrs[
+        'readonly'] = True  # although an html/javascript wizard could override this, we're not atually storing any data anyhow
+    context_dict['settings_form'] = settings_form
     context_dict['user'] = user
     context_dict['user_profile'] = profile
 
@@ -234,3 +233,17 @@ def settings(request):
         response.set_cookie('virgin', 'this is a first time user', max_age=4)
 
     return response
+
+
+# def handler404(request):
+#     response = render_to_response('404.html', {},
+#                                   context_instance=RequestContext(request))
+#     response.status_code = 404
+#     return response
+#
+#
+# def handler500(request):
+#     response = render_to_response('500.html', {},
+#                                   context_instance=RequestContext(request))
+#     response.status_code = 500
+#     return response
