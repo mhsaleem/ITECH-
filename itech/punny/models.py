@@ -20,7 +20,7 @@ class UserProfile(models.Model):
     def __unicode__(self):
         return self.user.username
     
-    def save(self):
+    def save(self): #resizes image and crops if not a square, automatically cropping based on the middle
 
         if not self.id and not self.picture:
             return            

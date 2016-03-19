@@ -213,7 +213,7 @@ def settings(request):
                 if 'picture' in request.FILES:
                     profile.picture = request.FILES['picture']  # check if the user actually uploaded a file
                 user.email = email
-                profile.title = Title.objects.get(title=form.cleaned_data['title'])
+                profile.selected_title = Title.objects.get(title=form.cleaned_data['title'])
                 profile.save()
                 user.save()
     context_dict = {'new_pun_form': new_pun_form, 'search_form': SearchForm()}
@@ -222,6 +222,7 @@ def settings(request):
                                           'title': profile.selected_title}, user=user)
     settings_form.fields['username'].widget.attrs[
         'readonly'] = True  # although an html/javascript wizard could override this, we're not atually storing any data anyhow
+    settings_form.fields['title'].choices = [(t.title, t.title) for t in Title.objects.filter(user=user)] #setting the available titles for this user
     context_dict['settings_form'] = settings_form
     context_dict['user'] = user
     context_dict['user_profile'] = profile
