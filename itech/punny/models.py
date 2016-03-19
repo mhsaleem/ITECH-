@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import UserManager
 from django.template.defaultfilters import slugify
 from updown.fields import RatingField
-
+from PIL import Image
 from django.db.models.signals import post_save
 
 
@@ -19,6 +19,30 @@ class UserProfile(models.Model):
     # Override the __unicode__() method to return out something meaningful!
     def __unicode__(self):
         return self.user.username
+    
+    def save(self):
+
+        if not self.id and not self.picture:
+            return            
+
+        super(UserProfile, self).save()
+
+        image = Image.open(self.picture)
+        (width, height) = image.size
+
+        if image.width > image.height:
+            middle = image.width / 2
+            distance_from_middle = height/2
+            image = image.crop((middle - distance_from_middle, 0, middle + distance_from_middle, image.height))
+        else:
+            middle = image.height /2
+            distance_from_middle = width/2
+            image = image.crop((0, middle - distance_from_middle, width, middle + distance_from_middle))
+
+
+        size = (600, 600)
+        image = image.resize(size, Image.ANTIALIAS)
+        image.save(self.picture.path)
 
 
 def create_profile(sender, instance, created, **kwargs):

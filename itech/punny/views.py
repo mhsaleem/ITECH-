@@ -48,7 +48,7 @@ def get_all_tags_list():
 
 
 def set_up_down_votes(request, puns):
-    if puns.exists():
+    if puns is not None:
         for pun in puns:
             pun.score = pun.rating.likes - pun.rating.dislikes
             x = pun.rating.get_rating_for_user(request.user)
@@ -184,6 +184,7 @@ def user_profile(request, username):
                 pun.picture = UserProfile.objects.get(user=pun.owner).picture
         context_dict['page_user'] = u
         context_dict['userprofile'] = up
+        context_dict['userprofile'] = up
         context_dict['puns'] = puns
         context_dict['user_score'] = total_score
 
@@ -233,6 +234,8 @@ def settings(request):
         response.set_cookie('virgin', 'this is a first time user', max_age=4)
 
     return response
+
+
 
 
 # def handler404(request):
