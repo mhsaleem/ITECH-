@@ -17,16 +17,33 @@ def populate():
 
     add_title(
         title="Grand Punmaster",
-        user=user_profile
+        time_in_days=0,
+        score=50
     )
 
     tag0 = add_tag(
         text="Religpun",
     )
 
-    add_badge(
+    add_title(
         title="100 Puns",
-        user=user_profile
+        time_in_days = 0,
+        score = 0,
+        posts = 100
+    )
+    add_title(
+        title="First pun",
+        time_in_days=0,
+        score=0,
+        posts=2
+    )
+
+
+    add_title(
+        title="2 Puns",
+        time_in_days=0,
+        score=0,
+        posts = 2
     )
 
     add_pun(
@@ -60,7 +77,9 @@ def populate():
 
     add_title(
         title="Grand Punmonster",
-        user=user_profile
+        time_in_days=10,
+        score=10,
+        posts=10
     )
 
     add_badge(
@@ -80,7 +99,7 @@ def populate():
 
     for b in Badge.objects.filter(user=user_r):
         print "- {0} - {1}".format(str(user_r), str(b))
-    for t in Title.objects.filter(user=user_r):
+    for t in Title.objects.all(): #TODO: this might need udatd, currently showing all titles rather than just this user
         print "- {0} - {1}".format(str(user_r), str(t))
     for p in Pun.objects.filter(owner=user_r):
         print "- {0} - {1}".format(str(user_r), str(p))
@@ -96,14 +115,13 @@ def add_user(name, password):
 
 def add_user_profile(user):
     u = UserProfile.objects.get_or_create(user=user)[0]
-    u.picture = '/static/images/leonardo-dicaprio.jpg'
+    u.picture = 'profile_images/IMG_3974.jpg'
     u.save()
     return u
 
 
-def add_title(title, user):
-    t = Title.objects.get_or_create(title=title)[0]
-    t.user.add(user)
+def add_title(title, time_in_days=0, score=0, posts=0):
+    t = Title.objects.get_or_create(title=title, min_number_days=time_in_days, min_score=score, min_number_posts=posts)[0]
     t.save()
     return t
 

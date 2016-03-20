@@ -6,11 +6,14 @@ class PunForm(forms.Form):
     puntext = forms.CharField(widget=forms.Textarea(
         attrs={
             'class': "form-control",
+
             'id': 'punBody',
             'placeholder': 'Insert your pun here...',
             'rows': '5',
+
             'style': 'resize: vertical;'}
     ), required=True)
+
     tags = forms.CharField(widget=forms.TextInput(
         attrs={
             'class': 'form-control',
@@ -42,8 +45,6 @@ class SettingsForm(forms.Form):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
         super(SettingsForm, self).__init__(*args, **kwargs)
-        #self.fields['title'].choices = [(t.title, t.title) for t in Title.objects.filter(user=self.user)]
+        # self.fields['title'].choices = [(t.title, t.title) for t in Title.objects.filter(user=self.user)]
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control'
-
-

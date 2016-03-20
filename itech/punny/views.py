@@ -8,11 +8,24 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from forms import PunForm, SearchForm, SettingsForm
 from datetime import timedelta
+from django.utils import timezone
 
 import re
 import datetime
 import operator
 
+
+def get_user_title_attributes(user):
+    user_attr = {}
+    puns = Pun.objects.filter(Q(owner=user))
+    total_score = 0
+    for pun in puns:
+       pun.score = pun.rating.likes - pun.rating.dislikes
+       total_score += pun.score
+    user_attr['posts_num'] = puns.count()
+    user_attr['score'] = total_score
+    user_attr['time_in_days'] = timezone.now() - user.date_joined
+    return user_attr
 
 # Reusable function to process a pun submission
 def process_pun_form(request):
@@ -222,7 +235,12 @@ def settings(request):
                                           'title': profile.selected_title}, user=user)
     settings_form.fields['username'].widget.attrs[
         'readonly'] = True  # although an html/javascript wizard could override this, we're not atually storing any data anyhow
-    settings_form.fields['title'].choices = [(t.title, t.title) for t in Title.objects.filter(user=user)] #setting the available titles for this user
+    user_attr = get_user_title_attributes(user)
+    #checking what titles this user meets requirements for
+    settings_form.fields['title'].choices = [(t.title, t.title) for t in Title.objects.filter(
+                                                                                              min_number_days__lte=user_attr['time_in_days'].days,
+                                                                                              min_score__lte=user_attr['score'],
+                                                                                              min_number_posts__lte=user_attr['posts_num'])]
     context_dict['settings_form'] = settings_form
     context_dict['user'] = user
     context_dict['user_profile'] = profile
@@ -231,13 +249,10 @@ def settings(request):
     if did_post_pun:
         response.set_cookie('message', 'pun posted!', max_age=2)
     if (
-                user.last_login - user.date_joined).seconds < 60:  # user registered less than sixty seconds ago. Display message for help
+        user.last_login - user.date_joined).seconds < 60:  # user registered less than sixty seconds ago. Display message for help
         response.set_cookie('virgin', 'this is a first time user', max_age=4)
 
     return response
-
-
-
 
 # def handler404(request):
 #     response = render_to_response('404.html', {},
