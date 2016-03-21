@@ -90,11 +90,14 @@
                 <div class="timeline-user">
                     <div class="row">
                         <span>
-                        <img class="userImage" src="{{ pun.picture.url }}">
+                        <img class="userImage" src="{{ pun.profile.picture.url }}">
                     </span>
                         <span>
                         <p>
                             <a href="/punny/profile/{{ pun.owner.username }}">{{ pun.owner.username }}</a>
+                            <span class="label label-default">
+                            {{ pun.profile.selected_title }}
+                        </span>
                         </p>
                     </span>
                     </div>

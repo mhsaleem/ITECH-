@@ -129,7 +129,7 @@ def search(request):
     if puns is not None:
         puns = order_query_set_by_pun_score(puns)
         for pun in puns:
-            pun.picture = UserProfile.objects.get(user=pun.owner).picture
+            pun.profile = UserProfile.objects.get(user=pun.owner)
     context_dict['tags_list'] = get_all_tags_list()
     context_dict['query_string'] = query_string
     context_dict['puns'] = puns
@@ -160,7 +160,7 @@ def tag_detail(request, tag_name_slug):
         if puns.exists():
             puns = order_query_set_by_pun_score(puns)
             for pun in puns:
-                pun.picture = UserProfile.objects.get(user=pun.owner).picture
+                pun.profile = UserProfile.objects.get(user=pun.owner)
         context_dict['tag'] = tag
         context_dict['puns'] = puns
 
@@ -194,7 +194,7 @@ def user_profile(request, username):
         if puns.exists():
             puns = order_query_set_by_pun_score(puns)
             for pun in puns:
-                pun.picture = UserProfile.objects.get(user=pun.owner).picture
+                pun.profile = UserProfile.objects.get(user=pun.owner)
         context_dict['page_user'] = u
         context_dict['userprofile'] = up
         context_dict['userprofile'] = up
@@ -222,16 +222,19 @@ def settings(request):
             form = SettingsForm(request.POST)
             tt = form['title']
             if form.is_valid():
-                email = form.cleaned_data['email']
                 if 'picture' in request.FILES:
                     profile.picture = request.FILES['picture']  # check if the user actually uploaded a file
-                user.email = email
+                user.first_name = form.cleaned_data['firstname']
+                user.last_name = form.cleaned_data['lastname']
+                user.email = form.cleaned_data['email']
                 profile.selected_title = Title.objects.get(title=form.cleaned_data['title'])
                 profile.save()
                 user.save()
     context_dict = {'new_pun_form': new_pun_form, 'search_form': SearchForm()}
     settings_form = SettingsForm(initial={'username': user.username,
                                           'email': user.email,
+                                          'firstname' : user.first_name,
+                                          'lastname' : user.last_name,
                                           'title': profile.selected_title}, user=user)
     settings_form.fields['username'].widget.attrs[
         'readonly'] = True  # although an html/javascript wizard could override this, we're not atually storing any data anyhow

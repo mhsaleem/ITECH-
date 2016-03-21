@@ -115,7 +115,7 @@ def add_user(name, password):
 
 def add_user_profile(user):
     u = UserProfile.objects.get_or_create(user=user)[0]
-    u.picture = 'profile_images/IMG_3974.jpg'
+    u.picture = 'profile_images/IMG_3483.jpg'
     u.save()
     return u
 
