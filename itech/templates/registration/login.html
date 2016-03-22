@@ -1,9 +1,5 @@
 {% extends 'base.html' %}
 
-{#{% load staticfiles %}#}
-{##}
-{#{% block title %}About{% endblock %}#}
-
 {% block body_block %}
     <section id="login">
 
@@ -26,23 +22,10 @@
                         </div>
                     </form>
 
-                </div><!--end of form column-->
+                </div>
                 <div class="col-md-4"></div>
             </div>
         </div>
 
     </section>
-    {#    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">#}
-    {#        <div>#}
-    {#            <h1>Login</h1>#}
-    {#            <form method="post" action=".">#}
-    {#                {% csrf_token %}#}
-    {##}
-    {#                <input type="submit" value="Log in"/>#}
-    {#                <input type="hidden" name="next" value="{{ next }}"/>#}
-    {#            </form>#}
-    {##}
-    {#            <p>Not a member? <a href="{% url 'registration_register' %}">Register</a>!</p>#}
-    {#        </div>#}
-    {#    </div>#}
 {% endblock %}

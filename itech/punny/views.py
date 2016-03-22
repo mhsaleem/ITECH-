@@ -228,7 +228,6 @@ def user_profile(request, username):
 @login_required
 def settings(request):
     did_post_pun = False
-    did_save_details = False
     user = request.user
     profile = UserProfile.objects.get(user=user)
     new_pun_form = PunForm()
@@ -279,3 +278,8 @@ def settings(request):
 
     return response
 
+def handler404(request):
+    response = render_to_response('404.html', {},
+                                  context_instance=RequestContext(request))
+    response.status_code = 404
+    return response
