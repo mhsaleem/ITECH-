@@ -39,8 +39,8 @@ class SearchForm(forms.Form):
 class SettingsForm(forms.Form):
     username = forms.CharField()
     email = forms.CharField()
-    firstname = forms.CharField()
-    lastname = forms.CharField()
+    firstname = forms.CharField(required=False)
+    lastname = forms.CharField(required=False)
     title = forms.ChoiceField(required=False, choices=[(t.title, t.title) for t in Title.objects.all()])
     picture = forms.ImageField(required=False)
 

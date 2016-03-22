@@ -160,5 +160,5 @@ def add_tag(text):
 
 # Start execution here!
 if __name__ == '__main__':
-    print "Starting Rango population script..."
+    print "Starting Punny population script..."
     populate()

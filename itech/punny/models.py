@@ -90,18 +90,6 @@ class Pun(models.Model):
     def __unicode__(self):
         return self.text
 
-    # def save(self):
-    #     for t in titles_per_score.titles:
-    #         title = Title.objects.get_or_create(title=t.title)
-    #         puns = Pun.objects.filter(owner=self.owner)
-    #         total_score = 0
-    #         for pun in puns:
-    #             pun.score = pun.rating.likes - pun.rating.dislikes
-    #             total_score += pun.score
-    #         time_elapsed = timezone.now() - self.owner.date_joined
-    #         if t.meets_min_score(total_score) & t.meets_account_time(time_elapsed):
-    #             title.user.add(self.owner)
-    #             title.save()
-    #     return
+
 
 

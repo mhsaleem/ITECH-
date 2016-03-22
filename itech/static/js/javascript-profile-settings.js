@@ -13,7 +13,13 @@ jQuery(document).ready(function($) {
     if (msg) {
         notification.show();
         notification.text('Thanks for signing up! If you want you can customize your profile here. Your title will be displayed next to any puns you post, earn new ones by posting puns!')
-    };
+    }
+
+    saved_msg = $.cookie('saved');
+    if (saved_msg) {
+        notification.show();
+        notification.text('Your details have been saved!');
+    }
 
 
 });
