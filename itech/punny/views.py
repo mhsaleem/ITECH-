@@ -160,7 +160,7 @@ def search(request):
 
 
 def tag_detail(request, tag_name_slug):
-    did_post_pun = False
+    did_post_pun = ""
     if request.method == 'POST':
         form, did_post_pun = process_pun_form(request)
     else:
