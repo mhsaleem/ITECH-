@@ -171,7 +171,7 @@ def populate():
     # Add puns for user_laura
     add_pun(
         text="I'm just a Laur-unto myself",
-        owner=user_leifos,
+        owner=user_laura,
         tags=[tag_law, tag_name],
         score=15,
     )
