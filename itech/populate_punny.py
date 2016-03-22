@@ -8,19 +8,23 @@ django.setup()
 
 from punny.models import UserProfile, Title, Pun, Tag
 from django.contrib.auth.models import User
+import datetime
 
 
 def populate():
-    # Add a user called Rory
-    user_r = add_user(name='rory', password='rory')
-
-    add_user_profile(user_r)
 
     # Create titles to add to users
     add_title(
         title="Grand Punmaster",
         time_in_days=0,
         score=50
+    )
+
+    add_title(
+        title="Punmonster",
+        time_in_days=10,
+        score=10,
+        posts=10
     )
 
     add_title(
@@ -44,83 +48,157 @@ def populate():
     )
 
     # Add a tag to be added to puns
-    tag0 = add_tag(
+    tag_religpun = add_tag(
         text="Religpun",
     )
 
-    # Add puns for user_r
+    tag_name = add_tag(
+        text="name",
+    )
+
+    tag_jargpun = add_tag(
+        text="Jargpun"
+    )
+
+    tag_wildlife = add_tag(
+        text="wildlife"
+    )
+
+    tag_classroom = add_tag(
+        text="classroom"
+    )
+
+    tag_drugs = add_tag(
+        text="drugs"
+    )
+
+    tag_law = add_tag(
+        text="law"
+    )
+
+    ##########################
+    # Add a user called rory #
+    ##########################
+    user_r = add_user(name='rory', password='rory')
+
+    add_user_profile(user_r)
+
+    # Add puns for Rory
     add_pun(
-        text="This is a pun",
+        text="Ro-ro-roryour boat gently down the stream",
         owner=user_r,
-        tags=[tag0],
-        score=5,
+        tags=[tag_jargpun, tag_name],
+        score=0,
+        timestamp=datetime.datetime(2016, 2, 28, 12, 0, 30, 100)
     )
 
     add_pun(
         text="Whiteboards are remarkable!",
         owner=user_r,
-        tags=[tag0],
-        score=5,
+        tags=[tag_classroom],
+        score=50,
+        timestamp=datetime.datetime(2016, 2, 15, 23, 21, 22, 20)
     )
 
-    add_pun(
-        text="Leif me alone....",
-        owner=user_r,
-        tags=[tag0],
-        score=5,
-    )
-
-    # Add a user called hashim
-    user_h = add_user('hashim', 'hashim')
+    ############################
+    # Add a user called hashim #
+    ############################
+    user_h = add_user(name='hashim', password='hashim')
 
     add_user_profile(user_h)
 
-    tag0 = add_tag(
-        text="Jargpun"
-    )
-    tag1 = add_tag(
-        text="another tag"
-    )
-    tag2 = add_tag(
-        text="pancake day"
-    )
-
-    add_title(
-        title="Grand Punmonster",
-        time_in_days=10,
-        score=10,
-        posts=10
-    )
-
     add_pun(
-        text="This is another pun",
+        text="I've got some Hashim a pocket",
         owner=user_h,
-        tags=[tag0, tag2],
+        tags=[tag_name, tag_drugs],
         score=5,
+        nsfw=True,
+        timestamp=datetime.datetime(2016, 2, 15, 23, 21, 23, 10)
+    )
+
+    ###############################
+    # Add a user called alexander #
+    ###############################
+    user_a = add_user(name='alexander', password='alexander')
+
+    add_user_profile(user_a)
+
+    add_pun(
+        text="They're a great couple, Alex-and-her!",
+        owner=user_a,
+        tags=[tag_name],
+        score=1,
+        nsfw=True,
+        timestamp=datetime.datetime(2016, 2, 10, 8, 8, 8, 8),
+    )
+
+    ############################
+    # Add a user called leifos #
+    ############################
+    user_leifos = add_user(name='leifos', password='leifos')
+
+    add_user_profile(user_leifos)
+
+    # Add puns for leifos
+    add_pun(
+        text="I wish you'd just Leif me alone...",
+        owner=user_leifos,
+        tags=[tag_wildlife, tag_name],
+        score=15,
     )
 
     add_pun(
-        text="Punday high score",
-        owner=user_h,
-        tags=[tag0],
+        text="My puns are really starting to branch out",
+        owner=user_leifos,
+        tags=[tag_wildlife],
         score=20
     )
 
     add_pun(
-        text="Pun to be downvoted",
-        owner=user_h,
-        tags=[tag0, tag1, tag2],
-        score=20
+        text="I've decided to go to back to my hometown to get in touch with my roots",
+        owner=user_leifos,
+        tags=[tag_wildlife, tag_name],
+        score=25
+    )
+
+    ###########################
+    # Add a user called laura #
+    ###########################
+    user_laura = add_user(name='laura', password='laura')
+
+    add_user_profile(user_laura)
+
+    # Add puns for user_laura
+    add_pun(
+        text="I'm just a Laur-unto myself",
+        owner=user_leifos,
+        tags=[tag_law, tag_name],
+        score=15,
+    )
+
+    ###########################
+    # Add a user called david #
+    ###########################
+    user_david = add_user(name='david', password='david')
+
+    add_user_profile(user_david)
+
+    # Add puns for user_david
+    add_pun(
+        text="My friends used to call me David until I lost my ID. Now they just call me Dav",
+        owner=user_david,
+        tags=[tag_wildlife],
+        score=65,
     )
 
     for u in UserProfile.objects.all():
         print "- {0} - {1}".format(str(u))
-        for t in Title.objects.all(): #TODO: this might need udatd, currently showing all titles rather than just this user
-            print "- {0} - {1}".format(str(user_r), str(t))
-        for p in Pun.objects.filter(owner=user_r):
-            print "- {0} - {1}".format(str(user_r), str(p))
-            for t in Tag.objects.filter(pun__tags__pun=p):
-                print "- {0}".format('#' + str(t.text) + ", ")
+    #    for t in Title.objects.all(): #TODO: this might need udatd, currently showing all titles rather than just this user
+    #        print "- {0} - {1}".format(str(u), str(t))
+    #    for p in Pun.objects.filter(owner=u):
+    #        print "- {0} - {1}".format(str(u), str(p))
+    #        for t in Tag.objects.filter(pun__tags__pun=p):
+    #            print "- {0}".format('#' + str(t.text) + ", ")
 
 
 def add_user(name, password):
@@ -132,7 +210,6 @@ def add_user(name, password):
 
 def add_user_profile(user):
     u = UserProfile.objects.get_or_create(user=user)[0]
-    u.picture = 'profile_images/IMG_3483.jpg'
     u.save()
     return u
 
@@ -143,9 +220,11 @@ def add_title(title, time_in_days=0, score=0, posts=0):
     return t
 
 
-def add_pun(text, owner, tags, score):
+def add_pun(text, owner, tags, score, nsfw=False, timestamp=datetime.datetime.now):
     p = Pun.objects.get_or_create(text=text, owner=owner)[0]
     p.rating_likes = score
+    p.NSFW = nsfw
+    p.timestamp = timestamp
     for tag in tags:
         p.tags.add(tag)
     p.save()
