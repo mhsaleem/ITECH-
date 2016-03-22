@@ -16,7 +16,7 @@ class UserProfile(models.Model):
     # The additional attributes we wish to include.
     picture = models.ImageField(upload_to='profile_images', default='default-profile.png')
     selected_title = models.ForeignKey('Title')
-    # currentBadge = models.OneToOneField(Badge)
+    show_nsfw = models.BooleanField(default=False)
     # objects = UserManager()
 
     # Override the __unicode__() method to return out something meaningful!

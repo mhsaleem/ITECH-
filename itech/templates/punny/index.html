@@ -79,15 +79,15 @@
                     </div>
                 </form>
             </div>
-
-            <div class="row" style="padding-top: 50px">
-                <h4>Recent tags</h4>
-                {% for tag in tags.all %}
-                    <span class="label label-default">
-                             <a href="/punny/tag/{{ tag.text }}">#{{ tag.text }}</a>
-                    </span>
-                {% endfor %}
-            </div>
+            {% if tags %}
+                <div class="row" style="padding-top: 50px">
+                    <h4>Recent tags</h4>
+                    {% for tag in tags.all %}
+                        <span ng-repeat="tag in tags"><span class="label label-default"><a
+                                href="/punny/tag/{{ tag.text }}">#{{ tag.text }}</a></span> </span>
+                    {% endfor %}
+                </div>
+            {% endif %}
 
             <div class="row" style="padding-top: 10px">
                 <div class="col-sm-4">

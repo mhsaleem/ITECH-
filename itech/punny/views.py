@@ -95,7 +95,7 @@ def get_trending_tags(days=1):
     now = datetime.datetime.now()
     start_day = now - timedelta(days=days)
     puns = Pun.objects.filter(timeStamp__range=(start_day, now))
-    recent_tags = Tag.objects.filter(pun__tag=puns)
+    recent_tags = Tag.objects.filter(pun__tag=puns).distinct()[:5]
     return recent_tags
 
 
@@ -124,19 +124,22 @@ def search(request):
         form = PunForm()
     context_dict = {'new_pun_form': form, 'search_form': SearchForm()}
     query_string = ""
-    puns = None
+    puns = Pun.objects.all()
 
     search_form = SearchForm(request.GET)
     if search_form.is_valid():
         data = search_form.cleaned_data
         query_string = data['search']
         puns = watson.filter(Pun, query_string)
-    if request.user.is_authenticated():
-        puns = set_up_down_votes(request, puns)
     if puns is not None:
         puns = order_query_set_by_pun_score(puns)
         for pun in puns:
             pun.profile = UserProfile.objects.get(user=pun.owner)
+    if request.user.is_authenticated():
+        puns = set_up_down_votes(request, puns)
+        profile = UserProfile.objects.get(user=request.user)
+        if not profile.show_nsfw:
+            puns = [pun for pun in puns if pun.NSFW == False]
     context_dict['tags_list'] = get_all_tags_list()
     context_dict['query_string'] = query_string
     context_dict['puns'] = puns
@@ -164,7 +167,10 @@ def tag_detail(request, tag_name_slug):
             pun.score = pun.rating_likes - pun.rating_dislikes
         if request.user.is_authenticated():
             puns = set_up_down_votes(request, puns)
-        if puns.exists():
+            profile = UserProfile.objects.get(user=request.user)
+            if not profile.show_nsfw:
+                puns = [pun for pun in puns if pun.NSFW == False]
+        if puns:
             #puns = order_query_set_by_pun_score(puns)
             for pun in puns:
                 pun.profile = UserProfile.objects.get(user=pun.owner)
@@ -198,7 +204,10 @@ def user_profile(request, username):
             total_score += pun.score
         if request.user.is_authenticated():
             puns = set_up_down_votes(request, puns)
-        if puns.exists():
+            profile = UserProfile.objects.get(user=request.user)
+            if not profile.show_nsfw:
+                puns = [pun for pun in puns if pun.NSFW == False]
+        if not puns:
             puns = order_query_set_by_pun_score(puns)
             for pun in puns:
                 pun.profile = UserProfile.objects.get(user=pun.owner)
@@ -235,6 +244,7 @@ def settings(request):
                 user.last_name = form.cleaned_data['lastname']
                 user.email = form.cleaned_data['email']
                 profile.selected_title = Title.objects.get(title=form.cleaned_data['title'])
+                profile.show_nsfw = form.cleaned_data['show_nsfw']
                 profile.save()
                 user.save()
                 did_save_details = True
@@ -243,7 +253,8 @@ def settings(request):
                                           'email': user.email,
                                           'firstname' : user.first_name,
                                           'lastname' : user.last_name,
-                                          'title': profile.selected_title}, user=user)
+                                          'title': profile.selected_title,
+                                          'show_nsfw' : profile.show_nsfw}, user=user)
     settings_form.fields['username'].widget.attrs[
         'readonly'] = True  # although an html/javascript wizard could override this, we're not atually storing any data anyhow
     user_attr = get_user_title_attributes(user)
