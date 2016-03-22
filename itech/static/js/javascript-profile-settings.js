@@ -9,8 +9,8 @@ jQuery(document).ready(function($) {
      */
     $('#e1_element').fontIconPicker();
     var notification = $('#virginbox');
-    msg = $.cookie('virgin');
-    if (msg) {
+    success = $.cookie('virgin');
+    if (success) {
         notification.show();
         notification.text('Thanks for signing up! If you want you can customize your profile here. Your title will be displayed next to any puns you post, earn new ones by posting puns!')
     }

@@ -53,12 +53,24 @@ $(document).ready(function () {
         })
     });
     var notification = $('#pun_posted_confirm')
-    msg = $.cookie('message')
-    if (msg) {
+    success = $.cookie('success')
+    if (success) {
         notification.show()
         setTimeout(function () {
             notification.fadeOut().empty();
         }, 2000);
+        $.removeCookie('success');
+    };
+    failed = $.cookie('failed');
+    if (failed) {
+        notification.show();
+        notification.removeClass('alert-success');
+        notification.addClass('alert-danger');
+        notification.text("Pun failed.. :( someone has posted that pun before");
+        setTimeout(function () {
+            notification.fadeOut().empty();
+        }, 2000);
+        $.removeCookie('failed');
     };
 
     var maxCharacters = 350;

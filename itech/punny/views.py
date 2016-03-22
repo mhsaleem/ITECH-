@@ -13,7 +13,7 @@ from django.utils import timezone
 import re
 import datetime
 import operator
-
+from django.db import IntegrityError
 
 def get_user_title_attributes(user):
     user_attr = {}
@@ -38,13 +38,15 @@ def process_pun_form(request):
         tag_objs = []
         for tag in tags:
             tag_objs.append(Tag.objects.get_or_create(text=tag)[0])
-
         pun = Pun(text=form.cleaned_data['puntext'],
                   owner=request.user,
                   NSFW=form.cleaned_data['NSFW'],
                   flagCount=0)
         with watson.update_index():
-            pun.save()
+            try:
+                pun.save()
+            except IntegrityError:
+                return (PunForm(), did_post)
         for tag in tag_objs:
             pun.tags.add(tag)
             # adding tag objects to the pun
@@ -100,24 +102,28 @@ def get_trending_tags(days=1):
 
 
 def index(request):
-    did_post_pun = False
+    did_post_pun = ""
     user = request.user
     if request.method == 'POST':
         form, did_post_pun = process_pun_form(request)
     else:
         form = PunForm()
-
     context_dict = {'new_pun_form': form, 'user': user, 'search_form': SearchForm()}
     now = datetime.datetime.now()
     context_dict['tags'] = get_trending_tags(10)
     context_dict['today'] = get_top_puns_in_past_days(1)
     context_dict['week'] = get_top_puns_in_past_days(7)
     context_dict['month'] = get_top_puns_in_past_days(30)
-    return render(request, 'punny/index.html', context_dict)
+    response =  render(request, 'punny/index.html', context_dict)
+    if did_post_pun is True:
+        response.set_cookie('success', 'pun posted!', max_age=3)
+    elif did_post_pun is False:
+        response.set_cookie('failed', 'post failed', max_age=3)
+    return response
 
 
 def search(request):
-    did_post_pun = False
+    did_post_pun = ""
     if request.method == 'POST':
         form, did_post_pun = process_pun_form(request)
     else:
@@ -146,14 +152,15 @@ def search(request):
     response = render_to_response('punny/search-results.html',
                                   context_dict,
                                   context_instance=RequestContext(request))
-    if did_post_pun:
-        response.set_cookie('message', 'pun posted!', max_age=3)
-
+    if did_post_pun is True:
+        response.set_cookie('success', 'pun posted!', max_age=3)
+    elif did_post_pun is False:
+        response.set_cookie('failed', 'post failed', max_age=3)
     return response
 
 
 def tag_detail(request, tag_name_slug):
-    did_post_pun = False
+    did_post_pun = ""
     if request.method == 'POST':
         form, did_post_pun = process_pun_form(request)
     else:
@@ -180,14 +187,15 @@ def tag_detail(request, tag_name_slug):
     except Tag.DoesNotExist:
         pass
     response = render(request, 'punny/tag.html', context_dict)
-    if did_post_pun:
-        response.set_cookie('message', 'pun posted!', max_age=3)
-
+    if did_post_pun is True:
+        response.set_cookie('success', 'pun posted!', max_age=3)
+    elif did_post_pun is False:
+        response.set_cookie('failed', 'post failed', max_age=3)
     return response
 
 
 def user_profile(request, username):
-    did_post_pun = False
+    did_post_pun = ""
     if request.method == 'POST':
         form, did_post_pun = process_pun_form(request)
     else:
@@ -220,14 +228,17 @@ def user_profile(request, username):
     except UserProfile.DoesNotExist:
         pass
     response = render(request, 'punny/profile.html', context_dict)
-    if did_post_pun:
-        response.set_cookie('message', 'pun posted!', max_age=3)
+    if did_post_pun is True:
+        response.set_cookie('success', 'pun posted!', max_age=3)
+    elif did_post_pun is False:
+        response.set_cookie('failed', 'post failed', max_age=3)
     return response
 
 
 @login_required
 def settings(request):
-    did_post_pun = False
+    did_post_pun = ""
+    did_save_details = False
     user = request.user
     profile = UserProfile.objects.get(user=user)
     new_pun_form = PunForm()
@@ -268,8 +279,10 @@ def settings(request):
     context_dict['user_profile'] = profile
 
     response = render(request, 'punny/user-settings.html', context_dict)
-    if did_post_pun:
-        response.set_cookie('message', 'pun posted!', max_age=2)
+    if did_post_pun is True:
+        response.set_cookie('success', 'pun posted!', max_age=3)
+    elif did_post_pun is False:
+        response.set_cookie('failed', 'post failed', max_age=3)
     if did_save_details:
         response.set_cookie('saved', 'profile saved!', max_age=2)
     if (
