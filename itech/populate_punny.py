@@ -150,7 +150,7 @@ def populate():
     add_pun(
         text="My puns are really starting to branch out",
         owner=user_leifos,
-        tags=[tag_wildlife],
+        tags=[tag_wildlife, tag_name],
         score=20
     )
 
@@ -187,7 +187,7 @@ def populate():
     add_pun(
         text="My friends used to call me David until I lost my ID. Now they just call me Dav",
         owner=user_david,
-        tags=[tag_wildlife],
+        tags=[tag_name],
         score=65,
     )
 
