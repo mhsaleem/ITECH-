@@ -79,7 +79,7 @@ class Tag(models.Model):
 
 
 class Pun(models.Model):
-    text = models.CharField(max_length=350)
+    text = models.CharField(max_length=350,unique=True)
     owner = models.ForeignKey(User, related_name='owner')
     timeStamp = models.DateTimeField(auto_now_add=True)
     flagCount = models.IntegerField(default=0)
