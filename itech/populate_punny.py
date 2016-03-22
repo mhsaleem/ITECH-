@@ -6,7 +6,7 @@ import django
 
 django.setup()
 
-from punny.models import UserProfile, Title, Badge, Pun, Tag
+from punny.models import UserProfile, Title, Pun, Tag
 from django.contrib.auth.models import User
 
 
@@ -114,7 +114,7 @@ def populate():
     )
 
     for t in Title.objects.all(): #TODO: this might need udatd, currently showing all titles rather than just this user
-        print "- {0} - {1}".format(str(user_r), str(t))
+        print "- {0} - {1}".format("New title", str(t))
     for p in Pun.objects.filter(owner=user_r):
         print "- {0} - {1}".format(str(user_r), str(p))
         for t in Tag.objects.filter(pun__tags__pun=p):
@@ -158,5 +158,5 @@ def add_tag(text):
 
 # Start execution here!
 if __name__ == '__main__':
-    print "Starting Rango population script..."
+    print "Starting Punny population script..."
     populate()

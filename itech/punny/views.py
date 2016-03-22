@@ -91,6 +91,13 @@ def get_top_puns_in_past_days(days=1):
     else:
         return None
 
+def get_trending_tags(days=1):
+    now = datetime.datetime.now()
+    start_day = now - timedelta(days=days)
+    puns = Pun.objects.filter(timeStamp__range=(start_day, now))
+    recent_tags = Tag.objects.filter(pun__tag=puns)
+    return recent_tags
+
 
 def index(request):
     did_post_pun = False
@@ -102,7 +109,7 @@ def index(request):
 
     context_dict = {'new_pun_form': form, 'user': user, 'search_form': SearchForm()}
     now = datetime.datetime.now()
-
+    context_dict['tags'] = get_trending_tags(10)
     context_dict['today'] = get_top_puns_in_past_days(1)
     context_dict['week'] = get_top_puns_in_past_days(7)
     context_dict['month'] = get_top_puns_in_past_days(30)
@@ -158,7 +165,7 @@ def tag_detail(request, tag_name_slug):
         if request.user.is_authenticated():
             puns = set_up_down_votes(request, puns)
         if puns.exists():
-            puns = order_query_set_by_pun_score(puns)
+            #puns = order_query_set_by_pun_score(puns)
             for pun in puns:
                 pun.profile = UserProfile.objects.get(user=pun.owner)
         context_dict['tag'] = tag
@@ -212,6 +219,7 @@ def user_profile(request, username):
 @login_required
 def settings(request):
     did_post_pun = False
+    did_save_details = False
     user = request.user
     profile = UserProfile.objects.get(user=user)
     new_pun_form = PunForm()
@@ -220,7 +228,6 @@ def settings(request):
             new_pun_form, did_post_pun = process_pun_form(request)
         else:
             form = SettingsForm(request.POST)
-            tt = form['title']
             if form.is_valid():
                 if 'picture' in request.FILES:
                     profile.picture = request.FILES['picture']  # check if the user actually uploaded a file
@@ -230,6 +237,7 @@ def settings(request):
                 profile.selected_title = Title.objects.get(title=form.cleaned_data['title'])
                 profile.save()
                 user.save()
+                did_save_details = True
     context_dict = {'new_pun_form': new_pun_form, 'search_form': SearchForm()}
     settings_form = SettingsForm(initial={'username': user.username,
                                           'email': user.email,
@@ -251,6 +259,8 @@ def settings(request):
     response = render(request, 'punny/user-settings.html', context_dict)
     if did_post_pun:
         response.set_cookie('message', 'pun posted!', max_age=2)
+    if did_save_details:
+        response.set_cookie('saved', 'profile saved!', max_age=2)
     if (
         user.last_login - user.date_joined).seconds < 60:  # user registered less than sixty seconds ago. Display message for help
         response.set_cookie('virgin', 'this is a first time user', max_age=4)
