@@ -2,7 +2,7 @@ from django.conf.urls import patterns, url, include
 import views
 from updown.views import AddRatingFromModel
 from registration.backends.simple.views import RegistrationView
-
+from django.contrib import admin
 
 class MyRegistrationView(RegistrationView):
     def get_success_url(self, user):
@@ -22,4 +22,5 @@ urlpatterns = patterns('',
                        url(r"^search-results/", include("watson.urls", namespace="watson")),
                        url(r'^accounts/register/$', MyRegistrationView.as_view(), name='registration_register'),
                        url(r'^accounts/', include('registration.backends.simple.urls')),
+                       url(r'^admin/', include(admin.site.urls)),
                        )
