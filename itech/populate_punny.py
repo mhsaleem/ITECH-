@@ -191,15 +191,6 @@ def populate():
         score=65,
     )
 
-    for u in UserProfile.objects.all():
-        print "- {0} - {1}".format(str(u))
-    #    for t in Title.objects.all(): #TODO: this might need udatd, currently showing all titles rather than just this user
-    #        print "- {0} - {1}".format(str(u), str(t))
-    #    for p in Pun.objects.filter(owner=u):
-    #        print "- {0} - {1}".format(str(u), str(p))
-    #        for t in Tag.objects.filter(pun__tags__pun=p):
-    #            print "- {0}".format('#' + str(t.text) + ", ")
-
 
 def add_user(name, password):
     u = User.objects.get_or_create(username=name)[0]
