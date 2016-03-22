@@ -170,7 +170,7 @@ def tag_detail(request, tag_name_slug):
             profile = UserProfile.objects.get(user=request.user)
             if not profile.show_nsfw:
                 puns = [pun for pun in puns if pun.NSFW == False]
-        if puns.exists():
+        if puns:
             #puns = order_query_set_by_pun_score(puns)
             for pun in puns:
                 pun.profile = UserProfile.objects.get(user=pun.owner)
