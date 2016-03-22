@@ -228,6 +228,7 @@ def settings(request):
             new_pun_form, did_post_pun = process_pun_form(request)
         else:
             form = SettingsForm(request.POST)
+            tt = form['title']
             if form.is_valid():
                 if 'picture' in request.FILES:
                     profile.picture = request.FILES['picture']  # check if the user actually uploaded a file
@@ -267,8 +268,3 @@ def settings(request):
 
     return response
 
-def _404(request):
-    response = render_to_response('404.html', {},
-                                  context_instance=RequestContext(request))
-    response.status_code = 404
-    return response
