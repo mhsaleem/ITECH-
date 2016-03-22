@@ -11,41 +11,44 @@ from django.contrib.auth.models import User
 
 
 def populate():
+    # Add a user called Rory
     user_r = add_user(name='rory', password='rory')
 
-    user_profile = add_user_profile(user_r)
+    add_user_profile(user_r)
 
+    # Create titles to add to users
     add_title(
         title="Grand Punmaster",
         time_in_days=0,
         score=50
     )
 
+    add_title(
+        title="100 Puns",
+        time_in_days=0,
+        score=0,
+        posts=100
+    )
+    add_title(
+        title="Punter",
+        time_in_days=0,
+        score=0,
+        posts=1
+    )
+
+    add_title(
+        title="10 Pun Bowling",
+        time_in_days=0,
+        score=0,
+        posts=10
+    )
+
+    # Add a tag to be added to puns
     tag0 = add_tag(
         text="Religpun",
     )
 
-    add_title(
-        title="100 Puns",
-        time_in_days = 0,
-        score = 0,
-        posts = 100
-    )
-    add_title(
-        title="First pun",
-        time_in_days=0,
-        score=0,
-        posts=2
-    )
-
-
-    add_title(
-        title="2 Puns",
-        time_in_days=0,
-        score=0,
-        posts = 2
-    )
-
+    # Add puns for user_r
     add_pun(
         text="This is a pun",
         owner=user_r,
@@ -67,24 +70,26 @@ def populate():
         score=5,
     )
 
+    # Add a user called hashim
     user_h = add_user('hashim', 'hashim')
 
-    user_profile = add_user_profile(user_h)
+    add_user_profile(user_h)
 
-    tag0 = add_tag("Jargpun")
-    tag1 = add_tag("a")
-    tag2 = add_tag("pancake day")
+    tag0 = add_tag(
+        text="Jargpun"
+    )
+    tag1 = add_tag(
+        text="another tag"
+    )
+    tag2 = add_tag(
+        text="pancake day"
+    )
 
     add_title(
         title="Grand Punmonster",
         time_in_days=10,
         score=10,
         posts=10
-    )
-
-    add_badge(
-        title="Infinite Puns",
-        user=user_profile
     )
 
     add_pun(
@@ -94,11 +99,20 @@ def populate():
         score=5,
     )
 
-    add_pun("Punday high score", user_h, [tag0], 20)
-    add_pun("Pun to be downvoted", user_h, [tag0, tag1, tag2], 20)
+    add_pun(
+        text="Punday high score",
+        owner=user_h,
+        tags=[tag0],
+        score=20
+    )
 
-    for b in Badge.objects.filter(user=user_r):
-        print "- {0} - {1}".format(str(user_r), str(b))
+    add_pun(
+        text="Pun to be downvoted",
+        owner=user_h,
+        tags=[tag0, tag1, tag2],
+        score=20
+    )
+
     for t in Title.objects.all(): #TODO: this might need udatd, currently showing all titles rather than just this user
         print "- {0} - {1}".format(str(user_r), str(t))
     for p in Pun.objects.filter(owner=user_r):
@@ -108,7 +122,8 @@ def populate():
 
 
 def add_user(name, password):
-    u = User.objects.get_or_create(username=name, password=password)[0]
+    u = User.objects.get_or_create(username=name)[0]
+    u.set_password(password)
     u.save()
     return u
 
@@ -124,13 +139,6 @@ def add_title(title, time_in_days=0, score=0, posts=0):
     t = Title.objects.get_or_create(title=title, min_number_days=time_in_days, min_score=score, min_number_posts=posts)[0]
     t.save()
     return t
-
-
-def add_badge(title, user):
-    b = Badge.objects.get_or_create(title=title)[0]
-    b.user.add(user)
-    b.save()
-    return b
 
 
 def add_pun(text, owner, tags, score):

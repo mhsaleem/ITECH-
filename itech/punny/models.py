@@ -10,7 +10,6 @@ import titles_per_score
 from django.utils import timezone
 
 
-
 class UserProfile(models.Model):
     # This line is required. Links UserProfile to a User model instance.
     user = models.OneToOneField(User, unique=True)
@@ -43,7 +42,6 @@ class UserProfile(models.Model):
             distance_from_middle = width/2
             image = image.crop((0, middle - distance_from_middle, width, middle + distance_from_middle))
 
-
         size = (600, 600)
         image = image.resize(size, Image.ANTIALIAS)
         image.save(self.picture.path)
@@ -66,14 +64,6 @@ class Title(models.Model):
     min_score = models.IntegerField(max_length=16, default=0)
     min_number_posts = models.IntegerField(max_length=16, default=0)
     objects = UserManager()
-
-    def __unicode__(self):
-        return self.title
-
-
-class Badge(models.Model):
-    title = models.CharField(max_length=128, primary_key=True)
-    user = models.ManyToManyField(UserProfile)
 
     def __unicode__(self):
         return self.title

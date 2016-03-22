@@ -1,7 +1,7 @@
 from django.template.defaultfilters import slugify
 from watson import search as watson
 from django.shortcuts import render, render_to_response
-from models import Pun, Tag, UserProfile, Badge, Title
+from models import Pun, Tag, UserProfile, Title
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q

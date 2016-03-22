@@ -1,5 +1,4 @@
 from django.conf.urls import patterns, url, include
-from django.views.generic.base import RedirectView
 import views
 from updown.views import AddRatingFromModel
 from registration.backends.simple.views import RegistrationView
