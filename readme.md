@@ -10,11 +10,22 @@ To get going:
 
 ```
 cd [root_of_project]
+```
+```
 pip install -r requirements.txt
+```
+```
 cd itech/
+```
+```
 python manage.py makemigrations punny
+```
+```
 python manage.py migrate
+```
+```
 python populate_punny.py
+```
+```
 python manage.py runserver
 ```
-
