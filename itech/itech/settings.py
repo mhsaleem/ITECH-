@@ -30,7 +30,7 @@ SECRET_KEY = '!86y5-c4gx@jfuhx7*6o=u47+wq6(_*&3&%z(=8#cc16ufb4a-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['rorybain.pythonanywhere.com', '127.0.0.1']
+ALLOWED_HOSTS = ['rorybain.pythonanywhere.com', '127.0.0.1', 'localhost']
 
 TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')
 TEMPLATE_DIRS = (
