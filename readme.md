@@ -5,16 +5,24 @@ Punny Django Web Application
 
 ####To access a live version, go to: [Python Anywhere](https://rorybain.pythonanywhere.com/punny/)
 
-To run locally:
+######To see the content used in the ITECH Presentations, see the folder ```PlanningStages```
+
+#####To run locally:
  - Clone the repo using the url provided by Github above
+```
+$ git clone https://github.com/mhsaleem/ITECH-.git Punny
+```
+ - cd into the root directory
+```
+$ cd Punny
+```
  - Make sure you've set up a Virtual Environment for Punny
 ```
 $ mkvirtualenv punny
 $ workon punny
 ```
- - Once inside of your virtual environment run the commands:
+ - Once inside the project root--and using your virtual environment--run the commands:
 ```
-$ cd [root_of_project]
 $ pip install -r requirements.txt
 $ cd itech/
 $ python manage.py makemigrations punny
