@@ -5,7 +5,7 @@ Punny Django Web Application
 
 ####To access a live version, go to: [Python Anywhere](https://rorybain.pythonanywhere.com/punny/)
 
-######To see the content used in the ITECH Presentations, see the folder ```PlanningStages```
+######To see the content used in the ITECH Presentation, see the folder [PlanningStage](https://github.com/mhsaleem/ITECH-/tree/master/PlanningStage)
 
 #####To run locally:
  - Clone the repo using the url provided by Github above
